@@ -17,3 +17,8 @@ Evaluation Criteria:
         
     Documentation and Testing:
         Thorough documentation and a comprehensive set of test cases should be provided.
+
+
+שאלות לאלונה:
+1. מותר להשתמש בספריות חיצוניות, נגיד ply, re
+2. את ה ast יוצרים בעצמנו, כלומר נוד בעת ומבנה נתונים של עץ
