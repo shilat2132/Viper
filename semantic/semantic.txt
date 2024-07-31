@@ -1,0 +1,5 @@
+
+Semantic Analysis:
+
+Implement semantic checks to ensure the code is logically correct. 
+This includes type checking and verifying that variables are declared before use.

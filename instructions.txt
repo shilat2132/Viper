@@ -1,0 +1,19 @@
+
+Documentation:
+
+Provide clear documentation that includes:
+A language specification detailing the syntax and semantics
+Instructions on how to run the interpreter
+Example programs and expected outputs
+Project Report:
+
+Evaluation Criteria:
+    Correctness and Completeness:
+        The interpreter should correctly execute programs written in the custom language and 
+        handle errors gracefully.
+    
+    Design and Implementation:
+        The design of the language and the quality of the code should reflect good programming practices.
+        
+    Documentation and Testing:
+        Thorough documentation and a comprehensive set of test cases should be provided.

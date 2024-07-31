@@ -1,0 +1,5 @@
+Lexical Analysis:
+
+Implement a lexer to tokenize the input code. 
+This involves breaking down the code into meaningful tokens such as:
+     keywords, operators, identifiers, and literals.
