@@ -5,7 +5,6 @@ def add(x, y):
     print("the parameters are not numbers")
     return
 
-
 # Sub (x-y)
 def sub(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
@@ -21,7 +20,6 @@ def mul(x, y):
     print("the parameters are not numbers")
     return
 
-
 # div(x/y) - throw an error if y=0
 def div(x, y):
     if y == 0:
@@ -30,7 +28,6 @@ def div(x, y):
         return x / y
     print("the parameters are not numbers")
     return
-
 
 # StringAssign(x=y)
 def assign(x, y):
@@ -51,6 +48,7 @@ def equal(x, y):
 
 # Not Equal (x!=y)
 def not_equal(x, y):
+
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x != y
     print("the parameters are not numbers")
@@ -71,7 +69,6 @@ def less(x, y):
         return x < y
     print("the parameters are not numbers")
     return
-
 
 # Or (x || y)
 def Or(x, y):
@@ -94,7 +91,6 @@ def pow(x, y):
     print("the parameters are not numbers")
     return
 
-
 # Square (x^0.5)
 def sqrt(x):
     if isinstance(x, int) or isinstance(x, float):
@@ -111,7 +107,6 @@ def min(x, y):
         return y
     print("the parameters are not numbers")
     return
-
 
 # Max (x,y)
 def max(x, y):
