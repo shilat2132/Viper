@@ -2,7 +2,7 @@
 def add(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x + y
 
 
@@ -10,7 +10,7 @@ def add(x, y):
 def sub(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x - y
 
 
@@ -18,7 +18,7 @@ def sub(x, y):
 def mul(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x * y
 
 
@@ -28,7 +28,7 @@ def div(x, y):
         raise "ZeroDivisionError- cannot divide by zero"
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x / y
 
 
@@ -36,7 +36,7 @@ def div(x, y):
 def assign(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     x = y
     return x
 
@@ -45,7 +45,7 @@ def assign(x, y):
 def equal(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x == y
 
 
@@ -53,7 +53,7 @@ def equal(x, y):
 def not_equal(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x != y
 
 
@@ -61,7 +61,7 @@ def not_equal(x, y):
 def greater(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x > y
 
 
@@ -69,7 +69,7 @@ def greater(x, y):
 def less(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x < y
 
 
@@ -87,7 +87,7 @@ def And(x, y):
 def pow(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return x ** y
 
 
@@ -103,7 +103,7 @@ def sqrt(x):
 def min(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return min(x, y)
 
 
@@ -111,5 +111,5 @@ def min(x, y):
 def max(x, y):
     if not isinstance(x, int) or not isinstance(y, int) or not isinstance(x, float) or not isinstance(y, float):
         print("the parameters are not numbers")
-        return;
+        return
     return max(x, y)
