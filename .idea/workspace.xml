@@ -13,9 +13,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2k2ufXoUWsAuhIFRue17mL57r6J" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -25,7 +25,8 @@
   "keyToString": {
     "Python.math.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/maiat/Desktop/Viper",
+    "git-widget-placeholder": "yair",
+    "last_opened_file_path": "C:/Users/yairb/Desktop/עקרונות שפת תכנות/Viper",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -51,7 +52,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722494097546</updated>
+<<<<<<< HEAD
       <workItem from="1722494098730" duration="8037000" />
+=======
+      <workItem from="1722494098730" duration="2454000" />
+      <workItem from="1722500531183" duration="57000" />
+      <workItem from="1722500591210" duration="1562000" />
+>>>>>>> ae2e69175a9c1913158e16c7b2cc53f21768d4ca
     </task>
     <servers />
   </component>
