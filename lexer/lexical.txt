@@ -19,7 +19,7 @@ TODO:
 - build regular expression for each token format
 - build a class token. fields: 
      type: type of token (keyword, operator,...)
-     value: the given word in thr code
+     value: the given word in the code
      position: placement in the source code
 
      Example: Token(type='NUMBER', value=42, position=(1, 5)) # literal of a number 42 in line 1, word 5

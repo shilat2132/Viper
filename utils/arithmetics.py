@@ -28,9 +28,9 @@ def div(x, y):
         return x / y
     raise TypeError("the parameters are not numbers")
     
-# StringAssign(x=y)
-def assign(x, y):
-    x = y
+# Assign(x=y) variables are in dictionary
+def assign(varsDict: dict, x, y):
+    varsDict[x] = y
 
 
 
