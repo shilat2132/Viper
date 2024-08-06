@@ -7,11 +7,14 @@
 # Append
 
 class Array:
-    def __init__(self, initialVal):
+    def __init__(self, initialVal=None):
         if initialVal == None:
             self.a = []
         else:
             self.a=initialVal
+    
+    def __repr__(self):
+        return str(self.a)
 
     
     def length(self):
@@ -29,13 +32,14 @@ class Array:
     
     def get(self, i):
         l= self.length()
-        if i>= l or i<l:
+        if i>= l or i<0:
             raise ValueError(f"argument must be in range 0-{l}")
         return self.a[i]
     
     def addItem(self, i, element):
-        a1 = self.a[:i+1]
-        a2 = self.a[i+1]
+        a1 = self.a[:i]
+        a2 = self.a[i:]
+        print(a1, a2, [element])
         self.a = a1 + [element] + a2
     
     def append(self, element):
@@ -43,5 +47,8 @@ class Array:
 
     
     def remove(self, i):
-        self.a = self.a[:i] + self.a[i+1]
+        l= self.length()
+        if i>= l or i<0:
+            raise ValueError(f"argument must be in range 0-{l}")
+        self.a = self.a[:i] + self.a[i+1:]
     

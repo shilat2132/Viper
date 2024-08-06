@@ -23,52 +23,52 @@ def mul(x, y):
 # div(x/y) - throw an error if y=0
 def div(x, y):
     if y == 0:
-        raise "ZeroDivisionError- cannot divide by zero"
+        raise ArithmeticError("ZeroDivisionError - cannot divide by zero")
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x / y
-    print("the parameters are not numbers")
-    return
-
+    raise TypeError("the parameters are not numbers")
+    
 # StringAssign(x=y)
 def assign(x, y):
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        x = y
-        return x
-    print("the parameters are not numbers")
-    return
+    x = y
+
 
 
 # Equal (x==y)
 def equal(x, y):
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x == y
-    print("the parameters are not numbers")
-    return
-
+    return x == y
 
 # Not Equal (x!=y)
 def not_equal(x, y):
+    return x != y
 
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x != y
-    print("the parameters are not numbers")
-    return
-
+# not
+def negate(expression):
+    return not expression
 
 # Greater (x>y)
 def greater(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x > y
-    print("the parameters are not numbers")
-    return
+    raise TypeError("the parameters are not numbers")
 
+# >=
+def greaterEquals(x, y):
+    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
+        return x >= y
+    raise TypeError("the parameters are not numbers")
 
 # Smaller (x<y)
 def less(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x < y
-    print("the parameters are not numbers")
-    return
+    raise TypeError("the parameters are not numbers")
+
+# <=
+def lessEquals(x, y):
+    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
+        return x <= y
+    raise TypeError("the parameters are not numbers")
 
 # Or (x || y)
 def Or(x, y):
@@ -88,15 +88,13 @@ def And(x, y):
 def pow(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x**y
-    print("the parameters are not numbers")
-    return
+    raise TypeError("the parameters are not numbers")
 
 # Square (x^0.5)
 def sqrt(x):
     if isinstance(x, int) or isinstance(x, float):
         return x ** 0.5
-    print("the parameters are not numbers")
-    return
+    raise TypeError("the parameters are not numbers")
 
 
 # Min (x,y)
@@ -105,8 +103,7 @@ def min(x, y):
         if x <= y:
             return x
         return y
-    print("the parameters are not numbers")
-    return
+    raise TypeError("the parameters are not numbers")
 
 # Max (x,y)
 def max(x, y):
@@ -114,15 +111,17 @@ def max(x, y):
         if x <= y:
             return y
         return x
-    print("the parameters are not numbers")
-    return
+    raise TypeError("the parameters are not numbers")
 
 if __name__ == "__main__":
     print(add(1, 2))
     print(sub(1, 2))
     print(mul(5, 2))
     print(div(5, 2))
-    print(assign(5, 2))
+    x = 5
+    y=2
+    assign(x, y)
+    print(x, y)
     print(equal(5, 2))
     print(not_equal(5, 2))
     print(greater(5, 2))
