@@ -1,10 +1,13 @@
 import sys
 import os
-import inspect
 from dispatch import dispatchInit
+
+original_sys_path = sys.path.copy()
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../lexer')))
 from lexer import *
+
+sys.path = original_sys_path
 
 
 class Viper:
@@ -18,24 +21,23 @@ class Viper:
         self.stringCode = code
     
     def interperter(self):
-        # break into lines, each line trim and split with space
-        lines = self.stringCode.split("\n")
-        lineTokensArray = []
-        i =0
-        for l in lines:
-            lineArray = l.split()
-            print(lineArray)
-            for t in lineArray:
-                lineTokensArray.append(Token("identifier", t))
-            Viper.tokens.append(lineTokensArray)
-        print(Viper.dispatch["CONCAT"]("strings"," are fun"))
+        Viper.tokens = lexer(self.stringCode) # type: ignore
+        print(Viper.tokens[2], "\n", Viper.tokens[3])
+        # for v in Viper.tokens:
+        #     print(v)
+        # print(Viper.dispatch["CONCAT"]("strings"," are fun"))
 
            
 
 
 
 code = """x   =    5
-x = x + 3"""
+x = x+3
+y = x
+y = y^2
+isTrue = true
+if x<=5 && isTrue
+"""
 Viper(code).interperter()
 
 # x = 5

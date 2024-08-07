@@ -6,7 +6,7 @@ import inspect
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils')))
 
 import arrays
-import blocks
+import keywords
 import strings
 import tuples
 import arithmetics
@@ -18,8 +18,8 @@ def dispatchInit(dispatch):
     for name in dir(arrays):
             attr = getattr(arrays, name)
             dispatch[name] = attr
-    for name in dir(blocks):
-            attr = getattr(blocks, name)
+    for name in dir(keywords):
+            attr = getattr(keywords, name)
             dispatch[name] = attr
 
     for name in dir(tuples):
