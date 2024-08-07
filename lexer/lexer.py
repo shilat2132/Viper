@@ -8,5 +8,15 @@ class Token(object):
         return "Token(type= %s, value= %s)" % (self.type, self.value)
 
 token_patterns = {
-    's'
+    'KEYWORD': r'\b(if|else|while|for|return)\b',
+    'IDENTIFIER': r'[A-Za-z][A-Za-z0-9_]*',
+    'LITERAL': r'\d+',
+    'OPERATOR': r'[+\-*/=<>]+',
+    'DELIMITER': r'[();]',
 }
+
+
+def tokenize(code):
+    tokens = []
+    pos = 0
+    
