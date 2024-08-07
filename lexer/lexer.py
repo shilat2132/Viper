@@ -35,15 +35,25 @@ def tokenize(line):
     )
     |
     (
-        [=+*/%^-]                   # Group 6: Arithmetic operators
+        [+*/%^-]                   # Group 6: Arithmetic operators
     )
     |
     (
         \w*[a-zA-Z]\w*                         # Group 7: Identifiers (including those with numbers)
     )
     |
+    ([=]) #Group 8: assign
+    |
+    (\() #Group 9: openParen
+    |
+    (\)) #Group 10: closeParen
+    |
+    (\{) #Group 11: scopeOpenParen
+    |
+    (\}) #Group 12: scopeCloseParen
+    |
     (
-        \S                          # Group 8: Any non-whitespace character (lexical error)
+        \S  # Group 13: Any non-whitespace character (lexical error)
     )
     \s*                             
 '''
@@ -64,8 +74,18 @@ def tokenize(line):
             tokens.append(Token('operator', match.group(6)))
         elif match.group(7):  
             tokens.append(Token('identifier', match.group(7)))
-        elif match.group(8):  # Unexpected symbols
-            raise SyntaxError(f"Unexpected token: {match.group(8)}")
+        elif match.group(8):  
+            tokens.append(Token('assign', match.group(8)))
+        elif match.group(9):  
+            tokens.append(Token('openParen', match.group(9)))
+        elif match.group(10):  
+            tokens.append(Token('closeParen', match.group(10)))
+        elif match.group(11):  
+            tokens.append(Token('scopeOpenParen', match.group(11)))
+        elif match.group(12):  
+            tokens.append(Token('scopeCloseParen', match.group(12)))
+        elif match.group(13):  # Unexpected symbols
+            raise SyntaxError(f"Unexpected token: {match.group(13)}")
     
     return tokens
 

@@ -9,6 +9,11 @@ from lexer import *
 
 sys.path = original_sys_path
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../syntax')))
+from parser import *
+
+sys.path = original_sys_path
+
 
 class Viper:
     variables = {} #dictionary key is var's name, value is a tuple(type, value) -> x: ("number", 3)
@@ -22,7 +27,8 @@ class Viper:
     
     def interperter(self):
         Viper.tokens = lexer(self.stringCode) # type: ignore
-        print(Viper.tokens[2], "\n", Viper.tokens[3])
+        # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
+        Parser(Viper.tokens).parse() # type: ignore
         # for v in Viper.tokens:
         #     print(v)
         # print(Viper.dispatch["CONCAT"]("strings"," are fun"))
@@ -32,14 +38,15 @@ class Viper:
 
 
 code = """x   =    5
-x = x+3
-y = x
-y = y^2
-isTrue = true
-if x<=5 && isTrue
 """
 Viper(code).interperter()
 
+# x = (x+3)^2
+# y = sx
+# isTrue = true
+# if x<=5 && isTrue{
+# print("some str")
+# }
 # x = 5
 # if x<=5 or x!=4:
 #     print(2)
