@@ -6,6 +6,7 @@ class Parser:
         self.currentLine = 0
         self.currentIndex =0
 
+
     def retrieveToken(self, tokenIndex):
         try:
             return self.tokensMatrix[self.currentLine][tokenIndex]
@@ -62,7 +63,7 @@ class Parser:
         elif currentToken.type == 'boolean':
             return AstNode('Boolean', {"value": currentToken.value}) 
         else: 
-            raise SyntaxError(f"Unexpected token: {currentToken} in line {self.currentLine} col {self.currentIndex}")
+            raise SyntaxError(f"Unexpected token: {currentToken} in line {self.currentLine} col {index}")
 
 
 
@@ -78,6 +79,7 @@ class Parser:
 
     def parse(self):
         ast = Ast() 
+        i = 0
         while self.currentLine < len(self.tokensMatrix):
             node = self.parseStatement(self.currentIndex)
             ast.AddNode(node)
