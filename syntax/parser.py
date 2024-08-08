@@ -19,6 +19,8 @@ class Parser:
             if self.currentLine<len(self.tokensMatrix):
                 return self.tokensMatrix[self.currentLine][0]
             return None
+
+
         
     def parseExp(self, index):
         # handle expressions with ()
@@ -49,14 +51,36 @@ class Parser:
 
 
 
-    def parseStatement(self, index):
-        parent = self.retrieveToken(index)
-        if parent.type == "identifier" and self.nextToken(index).type =="assign":
+    def parseStatement(self):
+        parent = self.retrieveToken(self.currentIndex)
+        if parent.type == "identifier" and self.nextToken(self.index).type =="assign":
             node = AstNode("assign", None, [AstNode("var", {"value": parent.value})])
             index = index+2
             source = self.parseExp(index)
             node.addChild(source)
             return node
+
+        if parent.type == "Keyword" and self.nextToken(self.index).value =="if":
+            node = AstNode("if", None)
+            while self.retrieveToken(self.index) !="}":
+                self.parseStatement()
+                index = index + 1
+                node.addChild(node)
+            return node
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     def parse(self):
