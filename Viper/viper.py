@@ -27,9 +27,9 @@ class Viper:
     
     def interperter(self):
         Viper.tokens = lexer(self.stringCode) # type: ignore
-        print(Viper.tokens)
+        # print(Viper.tokens)
         # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
-        # Parser(Viper.tokens).parse() # type: ignore
+        Parser(Viper.tokens).parse() # type: ignore
         # for v in Viper.tokens:
         #     print(v)
         # print(Viper.dispatch["CONCAT"]("strings"," are fun"))
@@ -38,7 +38,11 @@ class Viper:
 
 
 
+<<<<<<< HEAD
 code = """[(2,4,5), ('ewef')]
+=======
+code = """t = x==1
+>>>>>>> shilat
 """
 Viper(code).interperter()
 
