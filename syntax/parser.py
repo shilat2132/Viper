@@ -4,6 +4,7 @@ class Parser:
     def __init__(self, tokensMatrix):
         self.tokensMatrix = tokensMatrix
         self.currentLine = 0
+        self.currentIndex =0
 
     def retrieveToken(self, tokenIndex):
         try:
@@ -20,21 +21,37 @@ class Parser:
                 return self.tokensMatrix[self.currentLine][0]
             return None
         
-    def parseExp(self, index):
+    def parseExp(self)->AstNode:
         # handle expressions with ()
-        op1 = self.parseTerm(index)
-        index+=1
-        operator = self.retrieveToken(index)
+        currentToken = self.retrieveToken(self.currentIndex)
+        if currentToken:
+            if currentToken.type =="openParen":
+                self.currentIndex +=1
+                op1 = self.parseExp()
+            elif currentToken.type == "closeParen":
+                self.currentIndex+=1
+                return None
+            else:
+                op1 = self.parseTerm(currentToken) 
+        self.currentIndex+=1
+         
+        operator = self.retrieveToken(self.currentIndex)
+        if operator and operator.type == "closeParen":
+            return op1
+
         if not operator: return op1 #if there is no more then expression is over
+
         if operator.type not in ["logical_operator", "operator"]: 
-            raise SyntaxError(f"error in line {self.currentLine} col {index}, expected operator but got {operator}")
-        op2 = self.parseTerm(index)
+            raise SyntaxError(f"error in line {self.currentLine} col {self.currentIndex}, expected operator but got {operator}")
+        self.currentIndex+=1
+        op2 = self.parseExp()
+        return AstNode("Exp", {"operator": operator}, [op1, op2])
 
 
 
     
-    def parseTerm(self, index)->AstNode:
-        currentToken = self.retrieveToken(index)
+    def parseTerm(self, currentToken)->AstNode:
+        # currentToken = self.retrieveToken(index)
         if not currentToken: return None
         if currentToken.type == 'identifier':
             return AstNode('var', {"value": currentToken.value})
@@ -45,7 +62,7 @@ class Parser:
         elif currentToken.type == 'boolean':
             return AstNode('Boolean', {"value": currentToken.value}) 
         else: 
-            raise SyntaxError(f"Unexpected token: {currentToken} in line {self.currentLine} col {index}")
+            raise SyntaxError(f"Unexpected token: {currentToken} in line {self.currentLine} col {self.currentIndex}")
 
 
 
@@ -53,17 +70,16 @@ class Parser:
         parent = self.retrieveToken(index)
         if parent.type == "identifier" and self.nextToken(index).type =="assign":
             node = AstNode("assign", None, [AstNode("var", {"value": parent.value})])
-            index = index+2
-            source = self.parseExp(index)
+            self.currentIndex+=2
+            source = self.parseExp()
             node.addChild(source)
             return node
 
 
     def parse(self):
         ast = Ast() 
-        i = 0
         while self.currentLine < len(self.tokensMatrix):
-            node = self.parseStatement(i)
+            node = self.parseStatement(self.currentIndex)
             ast.AddNode(node)
             self.currentLine +=1
         print(ast)
