@@ -38,7 +38,7 @@ class Viper:
 
 
 
-code = """x = (x+3)^2
+code = """(5,7)
 """
 Viper(code).interperter()
 
