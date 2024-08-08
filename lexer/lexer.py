@@ -19,7 +19,7 @@ def tokenize(line):
     )
     |
     (
-        \b(?:while|for|if|else|print|function|return|null)\b  # Group 2: Control flow keywords (whole words)
+        \b(?:while|for|if|else|print|function|return|null|in|range)\b  # Group 2: Control flow keywords (whole words)
     )
     |
     (
@@ -42,26 +42,26 @@ def tokenize(line):
         \w*[a-zA-Z]\w*                         # Group 7: Identifiers (including those with numbers)
     )
     |
-    ([=]) #Group 8: assign
+    ( \(\s*.*?\s*(?:\s*,\s*.*?\s*)*\) ) #Group 8: tuple
     |
-    (\() #Group 9: openParen
+    (\[\s*\d+(?:\.\d+)?(?:\s*,\s*\d+(?:\.\d+)?)*\s*\]')  #Group 9: array type numeric
     |
-    (\)) #Group 10: closeParen
+    (\[\s*(?:\"[^"]*\"|\'[^\']*\')(?:\s*,\s*(?:\"[^"]*\"|\'[^\']*\'))*\s*\]') #Group 10: array type string
     |
-    (\{) #Group 11: scopeOpenParen
+    (\[\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\)(?:\s*,\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\))*\s*\]') #Group 11: array type tuples
     |
-    (\}) #Group 12: scopeCloseParen
+    ([=]) #Group 12: assign
     |
-    ( \(\s*.*?\s*(?:\s*,\s*.*?\s*)*\) ) #Group 13: tuple
+    (\() #Group 13: openParen
     |
-    (\[\s*\d+(?:\.\d+)?(?:\s*,\s*\d+(?:\.\d+)?)*\s*\]')  #Group 14: array type numeric
+    (\)) #Group 14: closeParen
     |
-    (\[\s*(?:\"[^"]*\"|\'[^\']*\')(?:\s*,\s*(?:\"[^"]*\"|\'[^\']*\'))*\s*\]') #Group 15: array type string
+    (\{) #Group 15: scopeOpenParen
     |
-    (\[\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\)(?:\s*,\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\))*\s*\]') #Group 15: array type tuples
+    (\}) #Group 16: scopeCloseParen
     |
     (
-        \S  # Group 16: Any non-whitespace character (lexical error)
+        \S  # Group 17: Any non-whitespace character (lexical error)
     )
     \s*                             
 '''
@@ -82,24 +82,26 @@ def tokenize(line):
             tokens.append(Token('operator', match.group(6)))
         elif match.group(7):  
             tokens.append(Token('identifier', match.group(7)))
-        elif match.group(8):  
-            tokens.append(Token('assign', match.group(8)))
-        elif match.group(9):  
-            tokens.append(Token('openParen', match.group(9)))
-        elif match.group(10):  
-            tokens.append(Token('closeParen', match.group(10)))
-        elif match.group(11):  
-            tokens.append(Token('scopeOpenParen', match.group(11)))
-        elif match.group(12):  
-            tokens.append(Token('scopeCloseParen', match.group(12)))
+        elif match.group(8):
+            tokens.append(Token('tuple', match.group(8)))
+        elif match.group(9):
+            tokens.append(Token('numberArray', match.group(9)))
+        elif match.group(10):
+            tokens.append(Token('stringArray', match.group(10)))
+        elif match.group(11):
+            tokens.append(Token('tupleArray', match.group(11)))
+        elif match.group(12):
+            tokens.append(Token('assign', match.group(12)))
         elif match.group(13):
-            tokens.append(Token('tuple', match.group(13)))
+            tokens.append(Token('openParen', match.group(13)))
         elif match.group(14):
-            tokens.append(Token('tuple', match.group(14)))
+            tokens.append(Token('closeParen', match.group(14)))
         elif match.group(15):
-            tokens.append(Token('tuple', match.group(15)))
-        elif match.group(16):  # Unexpected symbols
-            raise SyntaxError(f"Unexpected token: {match.group(16)}")
+            tokens.append(Token('scopeOpenParen', match.group(15)))
+        elif match.group(16):
+            tokens.append(Token('scopeCloseParen', match.group(16)))
+        elif match.group(17):  # Unexpected symbols
+            raise SyntaxError(f"Unexpected token: {match.group(17)}")
     
     return tokens
 
