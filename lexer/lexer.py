@@ -19,7 +19,7 @@ def tokenize(line):
     )
     |
     (
-        \b(?:while|for|if|else|print|function)\b  # Group 2: Control flow keywords (whole words)
+        \b(?:while|for|if|else|print|function|return|null)\b  # Group 2: Control flow keywords (whole words)
     )
     |
     (
@@ -27,7 +27,7 @@ def tokenize(line):
     )
     |
     (
-        (?:<=|<|>=|>|==|!=|&&|\|\||!)    # Group 4: Logical operators
+        (?:<=|<|>=|>|==|!=|&&|\|\||!|)    # Group 4: Logical operators
     )
     |
     (
@@ -52,8 +52,16 @@ def tokenize(line):
     |
     (\}) #Group 12: scopeCloseParen
     |
+    ( \(\s*.*?\s*(?:\s*,\s*.*?\s*)*\) ) #Group 13: tuple
+    |
+    (\[\s*\d+(?:\.\d+)?(?:\s*,\s*\d+(?:\.\d+)?)*\s*\]')  #Group 14: array type numeric
+    |
+    (\[\s*(?:\"[^"]*\"|\'[^\']*\')(?:\s*,\s*(?:\"[^"]*\"|\'[^\']*\'))*\s*\]') #Group 15: array type string
+    |
+    (\[\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\)(?:\s*,\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\))*\s*\]') #Group 15: array type tuples
+    |
     (
-        \S  # Group 13: Any non-whitespace character (lexical error)
+        \S  # Group 16: Any non-whitespace character (lexical error)
     )
     \s*                             
 '''
@@ -84,8 +92,14 @@ def tokenize(line):
             tokens.append(Token('scopeOpenParen', match.group(11)))
         elif match.group(12):  
             tokens.append(Token('scopeCloseParen', match.group(12)))
-        elif match.group(13):  # Unexpected symbols
-            raise SyntaxError(f"Unexpected token: {match.group(13)}")
+        elif match.group(13):
+            tokens.append(Token('tuple', match.group(13)))
+        elif match.group(14):
+            tokens.append(Token('tuple', match.group(14)))
+        elif match.group(15):
+            tokens.append(Token('tuple', match.group(15)))
+        elif match.group(16):  # Unexpected symbols
+            raise SyntaxError(f"Unexpected token: {match.group(16)}")
     
     return tokens
 

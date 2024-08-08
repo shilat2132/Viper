@@ -38,7 +38,7 @@ Parenthesis = () for function call, {} for a block, [] for array, () for tuples
 
 
 MISSING:
-*not as !
-*return, none - keywords
+V*not as !
+V*return, none - keywords
 *[] for array, () for tuples - literals. distinguish between () of tuples and of condition or expression. 
      these literals won't necessarily have commas in them because they might have only one element
