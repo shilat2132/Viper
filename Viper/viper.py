@@ -38,11 +38,7 @@ class Viper:
 
 
 
-<<<<<<< HEAD
-code = """[(2,4,5), ('ewef')]
-=======
 code = """t = x==1
->>>>>>> shilat
 """
 Viper(code).interperter()
 
