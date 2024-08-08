@@ -34,7 +34,7 @@ class Parser:
             Parameters:
             None
             Returns:
-            Token: returns the current token or None if reached the end of line
+            returns the current token or None if reached the end of line
         """
         try:
             t = self.tokensMatrix[self.currentLine][self.currentIndex]
@@ -45,9 +45,9 @@ class Parser:
 
     def peekToken(self):
         """
-        returns the current token without forwarding the position in the tokens matrix
-        Parameters:
-        None
+        returns the current token without forwarding the position in the tokens matrix, 
+        would go to next line if current line is over
+        Returns:
         if reached end of code returns -1
         """
         # checks if the next token is within the same line
@@ -57,7 +57,6 @@ class Parser:
                 return self.tokensMatrix[self.currentLine+1][0]
         return -1
 
-
     def parseFunctionCall(self, funcName)->AstNode:
         """
         creating a node of a functionCall with the funcName and its args as children
@@ -66,19 +65,24 @@ class Parser:
         Returns:
         the functionCall node
         """
-        funcNode = AstNode("functionCall", {"val": funcName})
+        funcNode = AstNode("functionCall", funcName)
         args = self.consumeToken()
-        args = argsToList(args.value)
+        args = argsToList(args.value) # type: ignore
         for arg in args:
-            argNode = self.parseTerm(tokenizeLiteralAndIdentifier(arg))
+            argNode = self.parseTerm(tokenizeLiteralAndIdentifier(arg)) # type: ignore
             funcNode.addChild(argNode)
         return funcNode
 
     def parseExp(self)->AstNode:
+        """
+        creates a subTree recursively for expression: either arithmetical or logical
+        """
         currentToken = self.consumeToken()
         if currentToken:
             if currentToken.type =="openParen":
                 op1 = self.parseExp()
+            elif currentToken.type =="logical_operator" and currentToken.value =="!":
+                return AstNode("logicalExp", "!", [self.parseExp()])
             else:
                 op1 = self.parseTerm(currentToken) 
         else: return None #if currentToken is None then we reached the end of the line
@@ -88,13 +92,15 @@ class Parser:
             return op1
 
         if not operator: return op1 #if there is no more then expression is over
-
+        if operator.type == "scopeOpenParen":
+            self.currentIndex-=1
+            return op1
         if operator.type not in ["logical_operator", "operator"]: 
             raise SyntaxError(f"error in line {self.currentLine} col {self.currentIndex}, expected operator but got {operator}")
         op2 = self.parseExp()
 
         expType = "arithmeticExp" if operator.type == "operator" else "logicalExp"
-        return AstNode(expType, {"operator": operator.value}, [op1, op2])
+        return AstNode(expType, operator.value, [op1, op2])
     
     def parseTerm(self, currentToken)->AstNode:
         """
@@ -105,37 +111,37 @@ class Parser:
         """
         if not currentToken: return None
         if currentToken.type == 'identifier':
-            return AstNode('var', {"value": currentToken.value})
+            return AstNode('var', currentToken.value)
         elif currentToken.type == 'number':
-            return AstNode('Number', {"value": currentToken.value})
+            return AstNode('Number', currentToken.value)
         elif currentToken.type == 'boolean':
-            return AstNode('boolean', {"value": currentToken.value})
+            return AstNode('boolean', currentToken.value)
         elif currentToken.type == 'string':
-            return AstNode('string', {"value": currentToken.value})
+            return AstNode('string', currentToken.value)
         elif currentToken.type == 'array':
-            return AstNode('array', {"value": currentToken.value})
+            return AstNode('array', currentToken.value)
         elif currentToken.type == 'tuple':
-            return AstNode('tuple', {"value": currentToken.value})
+            return AstNode('tuple', currentToken.value)
         else:
-            raise SyntaxError(f"Unexpected token: {currentToken} in line {self.currentLine} col {self.currentIndex}")
+            raise SyntaxError(f"Unexpected token: '{currentToken.value}' in line {self.currentLine} col {self.currentIndex-1}")
 
  
     
     def parseStatement(self):
         parent = self.consumeToken()
-        peekToken = self.peekToken()
-        if peekToken ==-1:
-            return False
+        nextToken = self.peekToken()
+        if nextToken ==-1:
+            raise SyntaxError(f"Unresolved statement in line {self.currentLine-1}")
         # assign
-        if parent.type == "identifier" and peekToken.type == "assign":
-            node = AstNode("assign", None, [AstNode("var", {"value": parent.value})])
+        if parent.type == "identifier" and nextToken.type == "assign":
+            node = AstNode("assign", None, [AstNode("var", parent.value)])
             self.consumeToken() #forward the position from the assign token
             source = self.parseExp()
             node.addChild(source)
             return node
         
-        # function call
-        if parent.type=="identifier" and peekToken.type == "tuple":
+        # function call - keyword is for build in functions such as print and range
+        if (parent.type=="identifier" or parent.type=="keyword") and nextToken.type == "tuple":
             return self.parseFunctionCall(parent.value)
         
         # return statement
@@ -146,24 +152,40 @@ class Parser:
                 returnStatementNode.addChild(returnValueNode)
             return returnStatementNode
 
+        # if statement
         if parent.type == "keyword" and parent.value == "if":
-            node = AstNode("if", None)
-            self.currentIndex += 1
+            ifNode = AstNode("if", None)
             condition = self.parseExp()
-            node.addChild(condition)
-            while self.consumeToken().type != "scopeCloseParen":
-                n = self.parseStatement()
-                self.currentLine += 1
-                node.addChild(n)
+            if not condition:
+                raise SyntaxError(f"Missing condition in line {self.currentLine}")
+            ifNode.addChild(condition)
+            nextToken=self.consumeToken()
+            if not nextToken:
+                if not self.nextLine(): #if former line finished and so is the code, then syntax error
+                    raise SyntaxError(f"Missing if body in line {self.currentLine-1}")
+                nextToken = self.consumeToken()
+            # if we moved to next line but code isn't finished
+            if nextToken.type != "scopeOpenParen":
+                raise SyntaxError(f"scopes must have opening parenthasis, line {self.currentLine}")
+            endCode = False
+            if not self.consumeToken(): #if reached the end of the line move to next one
+                endCode = not self.nextLine()
+            else: self.currentIndex-=1 #if we didn't finish the line, go back to the token we consumed
+            while not endCode and self.peekToken().type != "scopeCloseParen":
+                blockStatement = self.parseStatement()
+                ifNode.addChild(blockStatement)
+                endCode = not self.nextLine()
 
-            return node
+            if endCode: #if code ended and we never got the }
+                raise SyntaxError("Missing '}'")
+            return ifNode
 
         if parent.type == "keyword" and parent.value == "else":
             node = AstNode("else", None)
             self.currentIndex += 1
             condition = self.parseExp(self.currentIndex)
             node.addChild(condition)
-            while self.consumeToken().type != "scopeCloseParen":
+            while self.peekToken().type != "scopeCloseParen":
                 n = self.parseStatement()
                 self.currentLine += 1
                 node.addChild(n)

@@ -5,10 +5,12 @@ The parser should follow the grammar rules defined for the language.
 
 
 grammar rules:
-#STATEMENTS
-* if statements: if-keyword, children: [condition, body, else block(default=None)]
+#STATEMENTS - function call for assign
 *return statement: type: "return", children: [what to return: literal/identifier/expression/ nothing]
 *assign: value of "assign", children: [target: identifier, source: expression/literal/function call]
+
+* if statements: if-keyword, children: [condition, body, else block(default=None)]
+
 *LOOPS
     **while: name: while, children: [condition, body: nodes]
     **for: name: for. children: [iterationVar, iterable: array/tupple/function of range, body: nodes]
@@ -19,7 +21,7 @@ if booleanExpression{
     list of statements
 }
 
-#EXPRESSIONS
+#EXPRESSIONS - Done
 *boolean expression: value of logical operator, children: [Left operand and right operand: 
     bool or binary expression(might be built from expression like x+3<y or boolean exp)]
 
@@ -33,6 +35,7 @@ if booleanExpression{
 
 #FunctionCall - funcName in the attrs, FunctionCall as type
 children: [args]
+
 
 
 
