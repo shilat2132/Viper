@@ -44,11 +44,11 @@ def tokenize(line):
     |
     ( \(\s*.*?\s*(?:\s*,\s*.*?\s*)*\) ) #Group 8: tuple
     |
-    (\[\s*\d+(?:\.\d+)?(?:\s*,\s*\d+(?:\.\d+)?)*\s*\]')  #Group 9: array type numeric
+    (\[\s*\d+(?:\.\d+)?(?:\s*,\s*\d+(?:\.\d+)?)*\s*\])  #Group 9: array type numeric
     |
-    (\[\s*(?:\"[^"]*\"|\'[^\']*\')(?:\s*,\s*(?:\"[^"]*\"|\'[^\']*\'))*\s*\]') #Group 10: array type string
+    (\[\s*(?:\"[^"]*\"|\'[^\']*\')(?:\s*,\s*(?:\"[^"]*\"|\'[^\']*\'))*\s*\]) #Group 10: array type string
     |
-    (\[\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\)(?:\s*,\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\))*\s*\]') #Group 11: array type tuples
+    (\[\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\)(?:\s*,\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\))*\s*\]) #Group 11: array type tuples
     |
     ([=]) #Group 12: assign
     |

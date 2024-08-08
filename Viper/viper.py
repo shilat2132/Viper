@@ -38,7 +38,7 @@ class Viper:
 
 
 
-code = """(5,7)
+code = """[(2,4,5), ('ewef')]
 """
 Viper(code).interperter()
 
