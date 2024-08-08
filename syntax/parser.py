@@ -23,9 +23,6 @@ class Parser:
                 return self.tokensMatrix[self.currentLine][0]
             return None
 
-<<<<<<< HEAD
-
-        
     def parseExp(self)->AstNode:
         # handle expressions with ()
         currentToken = self.retrieveToken(self.currentIndex)
@@ -57,7 +54,7 @@ class Parser:
     
     def parseTerm(self, currentToken)->AstNode:
         # currentToken = self.retrieveToken(index)
-=======
+
     def parseExp(self, index):
         # handle expressions with ()
         op1 = self.parseTerm(index)
@@ -70,7 +67,6 @@ class Parser:
 
     def parseTerm(self, index) -> AstNode:
         currentToken = self.retrieveToken(index)
->>>>>>> yair
         if not currentToken: return None
         if currentToken.type == 'identifier':
             return AstNode('var', {"value": currentToken.value})
@@ -87,13 +83,13 @@ class Parser:
         parent = self.retrieveToken(self.currentIndex)
         if parent.type == "identifier" and self.nextToken(self.index).type == "assign":
             node = AstNode("assign", None, [AstNode("var", {"value": parent.value})])
-<<<<<<< HEAD
+
             self.currentIndex+=2
             source = self.parseExp()
-=======
+
             index = index + 2
             source = self.parseExp(index)
->>>>>>> yair
+
             node.addChild(source)
             return node
 
