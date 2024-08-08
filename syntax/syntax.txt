@@ -15,19 +15,25 @@ grammar rules:
 *FUNCTION DEF
     **function defining: function keyword-type: "functionDef", attr: {function name, args}, children: [body, return statement]
 
+if booleanExpression{
+    list of statements
+}
 
 #EXPRESSIONS
 *boolean expression: value of logical operator, children: [Left operand and right operand: 
     bool or binary expression(might be built from expression like x+3<y or boolean exp)]
+
     -envolves any logical operator: ==, !=, &&, || !
     -might have one child operand for cases like !x
+
 *condition = boolean identifier, boolean expression
 
 *arithmetic exp: value of operator, children: 
     [left and right operand which are either another expression/ literal/identifier]
 
-#FunctionCall
-children: [funcName, args]
+#FunctionCall - funcName in the attrs, FunctionCall as type
+children: [args]
+
 
 
 

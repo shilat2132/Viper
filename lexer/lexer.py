@@ -42,26 +42,23 @@ def tokenize(line):
         \w*[a-zA-Z]\w*                         # Group 7: Identifiers (including those with numbers)
     )
     |
-    ( \(\s*.*?\s*(?:\s*,\s*.*?\s*)*\) ) #Group 8: tuple
+    ( \((?:\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\)) #Group 8: tuple
     |
-    (\[\s*\d+(?:\.\d+)?(?:\s*,\s*\d+(?:\.\d+)?)*\s*\])  #Group 9: array type numeric
+    (\[(?:\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\])  
+    #Group 9: array 
     |
-    (\[\s*(?:\"[^"]*\"|\'[^\']*\')(?:\s*,\s*(?:\"[^"]*\"|\'[^\']*\'))*\s*\]) #Group 10: array type string
+    ([=]) #Group 10: assign
     |
-    (\[\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\)(?:\s*,\s*\(\s*.*?\s*(?:\s*,\s*.*?\s*)*\))*\s*\]) #Group 11: array type tuples
+    (\() #Group 11: openParen
     |
-    ([=]) #Group 12: assign
+    (\)) #Group 12: closeParen
     |
-    (\() #Group 13: openParen
+    (\{) #Group 13: scopeOpenParen
     |
-    (\)) #Group 14: closeParen
-    |
-    (\{) #Group 15: scopeOpenParen
-    |
-    (\}) #Group 16: scopeCloseParen
+    (\}) #Group 14: scopeCloseParen
     |
     (
-        \S  # Group 17: Any non-whitespace character (lexical error)
+        \S  # Group 15: Any non-whitespace character (lexical error)
     )
     \s*                             
 '''
@@ -85,23 +82,19 @@ def tokenize(line):
         elif match.group(8):
             tokens.append(Token('tuple', match.group(8)))
         elif match.group(9):
-            tokens.append(Token('numberArray', match.group(9)))
+            tokens.append(Token('array', match.group(9)))
         elif match.group(10):
-            tokens.append(Token('stringArray', match.group(10)))
+            tokens.append(Token('assign', match.group(10)))
         elif match.group(11):
-            tokens.append(Token('tupleArray', match.group(11)))
+            tokens.append(Token('openParen', match.group(11)))
         elif match.group(12):
-            tokens.append(Token('assign', match.group(12)))
+            tokens.append(Token('closeParen', match.group(12)))
         elif match.group(13):
-            tokens.append(Token('openParen', match.group(13)))
+            tokens.append(Token('scopeOpenParen', match.group(13)))
         elif match.group(14):
-            tokens.append(Token('closeParen', match.group(14)))
-        elif match.group(15):
-            tokens.append(Token('scopeOpenParen', match.group(15)))
-        elif match.group(16):
-            tokens.append(Token('scopeCloseParen', match.group(16)))
-        elif match.group(17):  # Unexpected symbols
-            raise SyntaxError(f"Unexpected token: {match.group(17)}")
+            tokens.append(Token('scopeCloseParen', match.group(14)))
+        elif match.group(15):  # Unexpected symbols
+            raise SyntaxError(f"Unexpected token: {match.group(15)}")
     
     return tokens
 

@@ -5,12 +5,17 @@ class AstNode:
         self.attrs = attrs if attrs else {}
         self.children = children if children else []
         self.parent = parent
+        # for all children set their parent to be current node
+        if children:
+            for c in children:
+                c.setParent(self)
     
     def addChild(self, node):
+        node.setParent(self)
         self.children.append(node)
     
     def setParent(self, node):
-        self.parent = node.parent
+        self.parent = node
     
     def __repr__(self) -> str:
         children ="["
