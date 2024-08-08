@@ -14,6 +14,7 @@ grammar rules:
 *LOOPS
     **while: name: while, children: [condition, body: nodes]
     **for: name: for. children: [iterationVar, iterable: array/tupple/function of range, body: nodes]
+    
 *FUNCTION DEF
     **function defining: function keyword-type: "functionDef", attr: {function name, args}, children: [body, return statement]
 
@@ -21,7 +22,7 @@ if booleanExpression{
     list of statements
 }
 
-#EXPRESSIONS - Done
+#EXPRESSIONS - Done, deal with extra parenthasis
 *boolean expression: value of logical operator, children: [Left operand and right operand: 
     bool or binary expression(might be built from expression like x+3<y or boolean exp)]
 

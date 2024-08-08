@@ -39,9 +39,8 @@ class Viper:
 
 
 code = """
-if ((x<3)
-{
-    z=false
+for x in [1,4, "6"]{
+x=x-1
 }
 
 """

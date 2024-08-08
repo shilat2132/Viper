@@ -125,6 +125,27 @@ class Parser:
         else:
             raise SyntaxError(f"Unexpected token: '{currentToken.value}' in line {self.currentLine} col {self.currentIndex-1}")
 
+    def parseBlock(self, parentNode):
+        nextToken=self.consumeToken()
+        if not nextToken:
+            if not self.nextLine(): #if former line finished and so is the code, then syntax error
+                raise SyntaxError(f"Missing body in line {self.currentLine-1}")
+            nextToken = self.consumeToken()
+        # if we moved to next line but code isn't finished
+        if nextToken.type != "scopeOpenParen":
+            raise SyntaxError(f"scopes must have opening parenthasis, line {self.currentLine}")
+        endCode = False
+        if not self.consumeToken(): #if reached the end of the line move to next one
+            endCode = not self.nextLine()
+        else: self.currentIndex-=1 #if we didn't finish the line, go back to the token we consumed
+        while not endCode and self.peekToken().type != "scopeCloseParen":
+            blockStatement = self.parseStatement()
+            parentNode.addChild(blockStatement)
+            endCode = not self.nextLine()
+
+        if endCode: #if code ended and we never got the }
+            raise SyntaxError("Missing '}'")
+        self.consumeToken() #if we reached here it means we are on the } and need to consume it
  
     
     def parseStatement(self):
@@ -152,61 +173,54 @@ class Parser:
                 returnStatementNode.addChild(returnValueNode)
             return returnStatementNode
 
-        # if statement
-        if parent.type == "keyword" and parent.value == "if":
-            ifNode = AstNode("if", None)
+        # if statement and while loop
+        if parent.type == "keyword" and (parent.value == "if" or parent.value == "while"):
+            parentNode = AstNode(parent.value)
+
+            # condition
             condition = self.parseExp()
             if not condition:
                 raise SyntaxError(f"Missing condition in line {self.currentLine}")
-            ifNode.addChild(condition)
-            nextToken=self.consumeToken()
-            if not nextToken:
-                if not self.nextLine(): #if former line finished and so is the code, then syntax error
-                    raise SyntaxError(f"Missing if body in line {self.currentLine-1}")
-                nextToken = self.consumeToken()
-            # if we moved to next line but code isn't finished
-            if nextToken.type != "scopeOpenParen":
-                raise SyntaxError(f"scopes must have opening parenthasis, line {self.currentLine}")
-            endCode = False
-            if not self.consumeToken(): #if reached the end of the line move to next one
-                endCode = not self.nextLine()
-            else: self.currentIndex-=1 #if we didn't finish the line, go back to the token we consumed
-            while not endCode and self.peekToken().type != "scopeCloseParen":
-                blockStatement = self.parseStatement()
-                ifNode.addChild(blockStatement)
-                endCode = not self.nextLine()
+            parentNode.addChild(condition)
+            # block of statements
+            self.parseBlock(parentNode)
 
-            if endCode: #if code ended and we never got the }
-                raise SyntaxError("Missing '}'")
-            return ifNode
+            # check for an else block
+            if parent.value == "if":
+                nextToken = self.peekToken()
+                if nextToken!=-1 and nextToken.value=="else":
+                    if not self.consumeToken(): #if we got to end of line, move to next one
+                        self.nextLine()
+                        self.consumeToken() #consume the else
+                    elseNode = AstNode("elseBlock")
+                    self.parseBlock(elseNode)
+                    parentNode.addChild(elseNode)
+            return parentNode
+            
+        # for loop
+        if parent.value=="for":
+            forNode = AstNode("for")
 
-        if parent.type == "keyword" and parent.value == "else":
-            node = AstNode("else", None)
-            self.currentIndex += 1
-            condition = self.parseExp(self.currentIndex)
-            node.addChild(condition)
-            while self.peekToken().type != "scopeCloseParen":
-                n = self.parseStatement()
-                self.currentLine += 1
-                node.addChild(n)
-            return node
+            # child - iteration variable
+            iterationVar = self.consumeToken()
+            if not iterationVar or iterationVar.type != "identifier":
+                raise SyntaxError(f"line {self.currentLine}: a for loop must have a key to iterate with")
+            forNode.addChild(AstNode("iterationVar", iterationVar.value))
 
-        if parent.type == "keyword" and parent.value == "while":
-            node = AstNode("while", None)
-            self.currentIndex += 1
-            condition = self.parseExp(self.currentIndex)
-            node.addChild(condition)
-            self.currentIndex += 1
-            n = self.consumeToken()
-            if(n.value != "{"):
-                while self.consumeToken().type != "scopeCloseParen":
-                    print("d")
-
-
-
-
-            while self.consumeToken(self.index).value != "}":
-                self.parseStatement()
+            # checks if 'in' exists
+            inToken = self.consumeToken()
+            if not inToken or inToken.value != "in":
+                raise TypeError(f"Unexpected token. expected 'in'" )
+            
+            # check for iterable - still not checking type
+            iterable = self.consumeToken()
+            if not iterable or (iterable.type != "identifier" 
+                                and iterable.type not in ["array", "tuple"] 
+                                and iterable.value != "range"):
+                raise SyntaxError(f"line {self.currentLine}: expected iterable object")
+            forNode.addChild(AstNode(iterable.type, iterable.value))
+            self.parseBlock(forNode)
+            return forNode
 
 
     def parse(self):
