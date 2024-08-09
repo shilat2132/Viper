@@ -40,3 +40,10 @@ def tokenizeLiteralAndIdentifier(literal):
         return Token("identifier", literal)
     
     raise SyntaxError(f"Unexpected function argument {literal}")
+
+
+def checkParenthasesValidation(currentLine, parenthasesAmount: int):
+      if parenthasesAmount <0:
+                raise SyntaxError(f"line {currentLine}: extra )")
+      elif parenthasesAmount>0:
+           raise SyntaxError(f"line {currentLine}: extra (")

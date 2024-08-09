@@ -8,6 +8,7 @@ grammar rules:
 #STATEMENTS - function call for assign
 *return statement: type: "return", children: [what to return: literal/identifier/expression/ nothing]
 *assign: value of "assign", children: [target: identifier, source: expression/literal/function call]
+DONT FORGET TO ALLOW ASSIGNMENT WITH A FUNCTION CALL 
 
 * if statements: if-keyword, children: [condition, body, else block(default=None)]
 
@@ -15,14 +16,12 @@ grammar rules:
     **while: name: while, children: [condition, body: nodes]
     **for: name: for. children: [iterationVar, iterable: array/tupple/function of range, body: nodes]
     
-*FUNCTION DEF
+*FUNCTION DEF -still not done
     **function defining: function keyword-type: "functionDef", attr: {function name, args}, children: [body, return statement]
 
-if booleanExpression{
-    list of statements
-}
 
-#EXPRESSIONS - Done, deal with extra parenthasis
+
+#EXPRESSIONS - Done, deal with extra parenthasis for {}
 *boolean expression: value of logical operator, children: [Left operand and right operand: 
     bool or binary expression(might be built from expression like x+3<y or boolean exp)]
 

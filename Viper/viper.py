@@ -27,7 +27,7 @@ class Viper:
     
     def interperter(self):
         Viper.tokens = lexer(self.stringCode) # type: ignore
-        # print(Viper.tokens)
+        print(Viper.tokens[0])
         # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
         Parser(Viper.tokens).parse() # type: ignore
         # for v in Viper.tokens:
@@ -39,10 +39,9 @@ class Viper:
 
 
 code = """
-for x in [1,4, "6"]{
-x=x-1
-}
-
+for i in range(f){
+    y = y+2
+    }
 """
 Viper(code).interperter()
 

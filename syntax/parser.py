@@ -1,8 +1,6 @@
-import sys
-import os
+from typing import Tuple
 from customAST import *
 from utils import *
-original_sys_path = sys.path.copy()
 
 
 
@@ -73,34 +71,36 @@ class Parser:
             funcNode.addChild(argNode)
         return funcNode
 
-    def parseExp(self)->AstNode:
+    def parseExp(self, parenthesesAmount=0)->Tuple[AstNode, int] | None:
         """
         creates a subTree recursively for expression: either arithmetical or logical
         """
         currentToken = self.consumeToken()
         if currentToken:
             if currentToken.type =="openParen":
-                op1 = self.parseExp()
+                op1, parenthesesAmount = self.parseExp(parenthesesAmount+1)
             elif currentToken.type =="logical_operator" and currentToken.value =="!":
-                return AstNode("logicalExp", "!", [self.parseExp()])
+                negationExp, parenthesesAmount = self.parseExp(parenthesesAmount)
+                return AstNode("logicalExp", "!", [negationExp]), parenthesesAmount
             else:
                 op1 = self.parseTerm(currentToken) 
         else: return None #if currentToken is None then we reached the end of the line
          
         operator = self.consumeToken()
         if operator and operator.type == "closeParen":
-            return op1
+            return op1, parenthesesAmount-1
 
-        if not operator: return op1 #if there is no more then expression is over
-        if operator.type == "scopeOpenParen":
+        if not operator: return op1, parenthesesAmount #if there is no more then expression is over
+        if operator.type == "scopeOpenParen" or operator.type == "scopeCloseParen":
             self.currentIndex-=1
-            return op1
+            return op1, parenthesesAmount
         if operator.type not in ["logical_operator", "operator"]: 
-            raise SyntaxError(f"error in line {self.currentLine} col {self.currentIndex}, expected operator but got {operator}")
-        op2 = self.parseExp()
+            raise SyntaxError(f"error in line {self.currentLine} col {self.currentIndex}, expected operator but got {operator.type} of '{operator.value}'")
+        op2, parenthesesAmount = self.parseExp(parenthesesAmount)
 
+      
         expType = "arithmeticExp" if operator.type == "operator" else "logicalExp"
-        return AstNode(expType, operator.value, [op1, op2])
+        return AstNode(expType, operator.value, [op1, op2]), parenthesesAmount
     
     def parseTerm(self, currentToken)->AstNode:
         """
@@ -133,17 +133,19 @@ class Parser:
             nextToken = self.consumeToken()
         # if we moved to next line but code isn't finished
         if nextToken.type != "scopeOpenParen":
-            raise SyntaxError(f"scopes must have opening parenthasis, line {self.currentLine}")
+            raise SyntaxError(f"scopes must have opening parentheses, line {self.currentLine}")
         endCode = False
+        isNotCloseParenth = self.peekToken().type != "scopeCloseParen"
         if not self.consumeToken(): #if reached the end of the line move to next one
             endCode = not self.nextLine()
         else: self.currentIndex-=1 #if we didn't finish the line, go back to the token we consumed
-        while not endCode and self.peekToken().type != "scopeCloseParen":
+        while not endCode and isNotCloseParenth:
             blockStatement = self.parseStatement()
             parentNode.addChild(blockStatement)
+            isNotCloseParenth = self.peekToken().type != "scopeCloseParen"
             endCode = not self.nextLine()
 
-        if endCode: #if code ended and we never got the }
+        if isNotCloseParenth: 
             raise SyntaxError("Missing '}'")
         self.consumeToken() #if we reached here it means we are on the } and need to consume it
  
@@ -157,7 +159,8 @@ class Parser:
         if parent.type == "identifier" and nextToken.type == "assign":
             node = AstNode("assign", None, [AstNode("var", parent.value)])
             self.consumeToken() #forward the position from the assign token
-            source = self.parseExp()
+            source, parenthasesAmount = self.parseExp()
+            checkParenthasesValidation(self.currentLine, parenthasesAmount) # type: ignore
             node.addChild(source)
             return node
         
@@ -168,7 +171,8 @@ class Parser:
         # return statement
         if parent.type == "keyword" and parent.value == "return":
             returnStatementNode = AstNode("returnStatement")
-            returnValueNode = self.parseExp()
+            returnValueNode, parenthasesAmount = self.parseExp()
+            checkParenthasesValidation(self.currentLine, parenthasesAmount) # type: ignore
             if returnValueNode != None:
                 returnStatementNode.addChild(returnValueNode)
             return returnStatementNode
@@ -178,7 +182,8 @@ class Parser:
             parentNode = AstNode(parent.value)
 
             # condition
-            condition = self.parseExp()
+            condition, parenthasesAmount = self.parseExp()
+            checkParenthasesValidation(self.currentLine, parenthasesAmount) # type: ignore
             if not condition:
                 raise SyntaxError(f"Missing condition in line {self.currentLine}")
             parentNode.addChild(condition)
@@ -210,7 +215,7 @@ class Parser:
             # checks if 'in' exists
             inToken = self.consumeToken()
             if not inToken or inToken.value != "in":
-                raise TypeError(f"Unexpected token. expected 'in'" )
+                raise SyntaxError(f"Unexpected token. expected 'in'" )
             
             # check for iterable - still not checking type
             iterable = self.consumeToken()
@@ -218,7 +223,12 @@ class Parser:
                                 and iterable.type not in ["array", "tuple"] 
                                 and iterable.value != "range"):
                 raise SyntaxError(f"line {self.currentLine}: expected iterable object")
-            forNode.addChild(AstNode(iterable.type, iterable.value))
+            if iterable.value=="range":
+                rangeArgs = self.consumeToken()
+                if not rangeArgs:
+                    raise SyntaxError(f"line {self.currentLine}: range function wasn't called but just mentioned")
+                forNode.addChild(AstNode(iterable.value, rangeArgs.value ))
+            else: forNode.addChild(AstNode(iterable.type, iterable.value))
             self.parseBlock(forNode)
             return forNode
 
