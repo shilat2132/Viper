@@ -1,58 +1,47 @@
 # Add (x+y)
-def add(x, y):
+def add(x: int or float, y: int or float):
     """
     Adds two numbers together.
-    :param x: 
-    :param y: 
+    :param x: first number
+    :param y: second number
     :return: x+y
     """""
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x + y
-    print("the parameters are not numbers")
-    return
+    return x + y
 
 
 # Sub (x-y)
-def sub(x, y):
+def sub(x: int or float, y: int or float):
     """
     Subtracts two numbers together.
-    :param x:
-    :param y:
+    :param x: first number
+    :param y: second number
     :return: x-y
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x - y
-    print("the parameters are not numbers")
-    return
+    return x - y
 
 
 # Mul(x*y)
-def mul(x, y):
+def mul(x: int or float, y: int or float):
     """
     Multiplies two numbers together.
-    :param x:
-    :param y:
+    :param x: first number
+    :param y: second number
     :return: x*y
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x * y
-    print("the parameters are not numbers")
-    return
+    return x * y
 
 
 # div(x/y) - throw an error if y=0
-def div(x, y):
+def div(x: int or float, y: int or float):
     """
     Divides two numbers together.
-    :param x:
-    :param y:
+    :param x: first number
+    :param y: second number
     :return: x/y
     """
     if y == 0:
         raise ArithmeticError("ZeroDivisionError - cannot divide by zero")
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x / y
-    raise TypeError("the parameters are not numbers")
+    return x / y
 
 
 # Assign(x=y) variables are in dictionary
@@ -107,9 +96,7 @@ def greater(x, y):
     :param y:
     :return: True if greater, false otherwise
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x > y
-    raise TypeError("the parameters are not numbers")
+    return x > y
 
 
 # >=
@@ -120,9 +107,7 @@ def greaterEquals(x, y):
     :param y:
     :return: True if greater or equal, false otherwise
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x >= y
-    raise TypeError("the parameters are not numbers")
+    return x >= y
 
 
 # Smaller (x<y)
@@ -133,9 +118,7 @@ def less(x, y):
     :param y:
     :return: True if less, false otherwise
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x < y
-    raise TypeError("the parameters are not numbers")
+    return x < y
 
 
 # <=
@@ -146,9 +129,7 @@ def lessEquals(x, y):
     :param y:
     :return: True if less or equal, false otherwise
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x <= y
-    raise TypeError("the parameters are not numbers")
+    return x <= y
 
 
 # Or (x || y)
@@ -181,9 +162,7 @@ def power(x, y):
     :param y:
     :return: x to the power of y
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x**y
-    raise TypeError("the parameters are not numbers")
+    return x**y
 
 
 # Square (x^0.5)
@@ -193,9 +172,7 @@ def sqrt(x):
     :param x:
     :return: square root of x
     """
-    if isinstance(x, int) or isinstance(x, float):
-        return x ** 0.5
-    raise TypeError("the parameters are not numbers")
+    return x ** 0.5
 
 
 # Min (x,y)
@@ -206,11 +183,9 @@ def Min(x, y):
     :param y:
     :return: x if x is smaller than y, y otherwise
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        if x <= y:
-            return x
-        return y
-    raise TypeError("the parameters are not numbers")
+    if x <= y:
+        return x
+    return y
 
 
 # Max (x,y)
@@ -221,11 +196,10 @@ def Max(x, y):
     :param y:
     :return: x if x is larger than y, y otherwise
     """
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        if x <= y:
-            return y
-        return x
-    raise TypeError("the parameters are not numbers")
+    if x <= y:
+        return y
+    return x
+
 
 if __name__ == "__main__":
     print(add(1, 2))
