@@ -38,7 +38,8 @@ class Tuple:
         for _ in self._values:
             count += 1
         return count
+    # static function
+    def rangeTuple(end, start=0):
+        return range(start, end)
 
-# דוגמה לשימוש
-t = Tuple(1, 2, 3, 4, 5)
-print(t.length())  # הדפס 5
+

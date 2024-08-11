@@ -1,10 +1,18 @@
 import sys
 import os
-import inspect
 from dispatch import dispatchInit
+
+original_sys_path = sys.path.copy()
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../lexer')))
 from lexer import *
+
+sys.path = original_sys_path
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../syntax')))
+from parser import *
+
+sys.path = original_sys_path
 
 
 class Viper:
@@ -18,26 +26,31 @@ class Viper:
         self.stringCode = code
     
     def interperter(self):
-        # break into lines, each line trim and split with space
-        lines = self.stringCode.split("\n")
-        lineTokensArray = []
-        i =0
-        for l in lines:
-            lineArray = l.split()
-            print(lineArray)
-            for t in lineArray:
-                lineTokensArray.append(Token("identifier", t))
-            Viper.tokens.append(lineTokensArray)
-        print(Viper.dispatch["CONCAT"]("strings"," are fun"))
+        Viper.tokens = lexer(self.stringCode) # type: ignore
+        print(Viper.tokens[0])
+        # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
+        Parser(Viper.tokens).parse() # type: ignore
+        # for v in Viper.tokens:
+        #     print(v)
+        # print(Viper.dispatch["CONCAT"]("strings"," are fun"))
 
            
 
 
 
-code = """x   =    5
-x = x + 3"""
+code = """
+for i in range(f){
+    y = y+2
+    }
+"""
 Viper(code).interperter()
 
+# x = (x+3)^2
+# y = sx
+# isTrue = true
+# if x<=5 && isTrue{
+# print("some str")
+# }
 # x = 5
 # if x<=5 or x!=4:
 #     print(2)

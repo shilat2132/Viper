@@ -1,4 +1,3 @@
-import re
 
 def REPLACE(container: str, find: str, replace: str) -> str:
     containerSize = len(container)
@@ -36,10 +35,3 @@ def isLower(text: str) -> bool:
 
 def CONCAT(first: str, last: str) -> str:
     return first + last
-
-# trim
-def trim(s):
-    return re.sub(r'\s+', ' ', s)
-
-if __name__ == "__main__":
-    print(trim("  gvc   gfv  jhg  "))
