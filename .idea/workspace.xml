@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c3e2ad06-1b4e-473b-b962-27f23a5e684f" name="Changes" comment="rules">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Viper/Rules" beforeDir="false" afterPath="$PROJECT_DIR$/Viper/Rules" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/arrays.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/arrays.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/strings.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/strings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/tuples.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/tuples.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +58,8 @@
       <workItem from="1722500591210" duration="2109000" />
       <workItem from="1722529837662" duration="615000" />
       <workItem from="1723098772146" duration="10704000" />
-      <workItem from="1723316776926" duration="6419000" />
+      <workItem from="1723316776926" duration="6749000" />
+      <workItem from="1723361021527" duration="123000" />
     </task>
     <task id="LOCAL‎-00001" summary="rules">
       <option name="closed" value="true" />
