@@ -1,4 +1,5 @@
 # Add (x+y)
+<<<<<<< HEAD
 def add(x, y):
     """
         Adds two numbers and returns the result.
@@ -18,9 +19,21 @@ def add(x, y):
         return x + y
     print("the parameters are not numbers")
     return
+=======
+def add(x: int or float, y: int or float):
+    """
+    Adds two numbers together.
+    :param x: first number
+    :param y: second number
+    :return: x+y
+    """""
+    return x + y
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # Sub (x-y)
+<<<<<<< HEAD
 def sub(x, y):
     """
         Subtracts the second number from the first and returns the result.
@@ -62,9 +75,32 @@ def mul(x, y):
         return x * y
     print("the parameters are not numbers")
     return
+=======
+def sub(x: int or float, y: int or float):
+    """
+    Subtracts two numbers together.
+    :param x: first number
+    :param y: second number
+    :return: x-y
+    """
+    return x - y
+
+
+# Mul(x*y)
+def mul(x: int or float, y: int or float):
+    """
+    Multiplies two numbers together.
+    :param x: first number
+    :param y: second number
+    :return: x*y
+    """
+    return x * y
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # div(x/y) - throw an error if y=0
+<<<<<<< HEAD
 def div(x, y):
     """
         Divides the first number by the second and returns the result. Raises an error if the divisor is zero.
@@ -86,12 +122,34 @@ def div(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x / y
     raise TypeError("the parameters are not numbers")
+=======
+def div(x: int or float, y: int or float):
+    """
+    Divides two numbers together.
+    :param x: first number
+    :param y: second number
+    :return: x/y
+    """
+    if y == 0:
+        raise ArithmeticError("ZeroDivisionError - cannot divide by zero")
+    return x / y
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # Assign(x=y) variables are in dictionary
 def assign(varsDict: dict, x, y):
     """
+<<<<<<< HEAD
         Assigns the value of y to the variable x in the provided dictionary.
+=======
+    Assigns value y to variable x.
+    :param varsDict: dictionary where variables are held
+    :param x: variable to assign
+    :param y: value to assign
+    :return: x=y
+    """
+    varsDict[x] = y
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
         Parameters:
         varsDict (dict): The dictionary storing variables.
@@ -101,10 +159,10 @@ def assign(varsDict: dict, x, y):
 
     varsDict[x] = y
 
-
 # Equal (x==y)
 def equal(x, y):
     """
+<<<<<<< HEAD
         Checks if two values are equal.
 
         Parameters:
@@ -115,12 +173,20 @@ def equal(x, y):
         bool: True if x equals y, otherwise False.
         """
 
+=======
+    Checks if two numbers are equal
+    :param x:
+    :param y:
+    :return: True if equal, false otherwise
+    """
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
     return x == y
 
 
 # Not Equal (x!=y)
 def not_equal(x, y):
     """
+<<<<<<< HEAD
         Checks if two values are not equal.
 
         Parameters:
@@ -131,12 +197,20 @@ def not_equal(x, y):
         bool: True if x does not equal y, otherwise False.
         """
 
+=======
+    Checks if two numbers are not equal
+    :param x:
+    :param y:
+    :return: True if not equal, false otherwise
+    """
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
     return x != y
 
 
 # not
 def negate(expression):
     """
+<<<<<<< HEAD
         Negates the boolean value of an expression.
 
         Parameters:
@@ -146,12 +220,19 @@ def negate(expression):
         bool: The negated boolean value.
         """
 
+=======
+    negates expression
+    :param expression:
+    :return: negated expression
+    """
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
     return not expression
 
 
 # Greater (x>y)
 def greater(x, y):
     """
+<<<<<<< HEAD
         Checks if the first number is greater than the second.
 
         Parameters:
@@ -168,11 +249,21 @@ def greater(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x > y
     raise TypeError("the parameters are not numbers")
+=======
+    Checks if x is greater than y
+    :param x:
+    :param y:
+    :return: True if greater, false otherwise
+    """
+    return x > y
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # >=
 def greaterEquals(x, y):
     """
+<<<<<<< HEAD
        Checks if the first number is greater than or equal to the second.
 
        Parameters:
@@ -189,11 +280,21 @@ def greaterEquals(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x >= y
     raise TypeError("the parameters are not numbers")
+=======
+    Checks if x is greater than or equal to y
+    :param x:
+    :param y:
+    :return: True if greater or equal, false otherwise
+    """
+    return x >= y
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # Smaller (x<y)
 def less(x, y):
     """
+<<<<<<< HEAD
        Checks if the first number is smaller than the second.
 
        Parameters:
@@ -210,11 +311,21 @@ def less(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x < y
     raise TypeError("the parameters are not numbers")
+=======
+    Checks if x is less than y
+    :param x:
+    :param y:
+    :return: True if less, false otherwise
+    """
+    return x < y
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # <=
 def lessEquals(x, y):
     """
+<<<<<<< HEAD
         Checks if the first number is smaller than or equal to the second.
 
         Parameters:
@@ -231,11 +342,21 @@ def lessEquals(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x <= y
     raise TypeError("the parameters are not numbers")
+=======
+    Checks if x is less than or equal to y
+    :param x:
+    :param y:
+    :return: True if less or equal, false otherwise
+    """
+    return x <= y
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # Or (x || y)
 def Or(x, y):
     """
+<<<<<<< HEAD
         Performs a logical OR operation between two expressions.
 
         Parameters:
@@ -249,11 +370,20 @@ def Or(x, y):
     if x or y == 1:
         return True
     return False
+=======
+    Checks if x or y
+    :param x:
+    :param y:
+    :return: True if x or y, false otherwise
+    """
+    return x | y
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # And (x&y)
 def And(x, y):
     """
+<<<<<<< HEAD
         Performs a logical AND operation between two expressions.
 
         Parameters:
@@ -288,11 +418,32 @@ def pow(x, y):
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x ** y
     raise TypeError("the parameters are not numbers")
+=======
+    Checks if x and y
+    :param x:
+    :param y:
+    :return: True if x and y, false otherwise
+    """
+    return x & y
+
+
+# Power (x^y)
+def power(x, y):
+    """
+    lifts x to the power of y
+    :param x:
+    :param y:
+    :return: x to the power of y
+    """
+    return x**y
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # Square (x^0.5)
 def sqrt(x):
     """
+<<<<<<< HEAD
         Returns the square root of a number.
 
         Parameters:
@@ -331,9 +482,31 @@ def min(x, y):
             return x
         return y
     raise TypeError("the parameters are not numbers")
+=======
+    calculates the square root of x
+    :param x:
+    :return: square root of x
+    """
+    return x ** 0.5
+
+
+# Min (x,y)
+def Min(x, y):
+    """
+    picks the smallest value between x and y
+    :param x:
+    :param y:
+    :return: x if x is smaller than y, y otherwise
+    """
+    if x <= y:
+        return x
+    return y
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 # Max (x,y)
+<<<<<<< HEAD
 def max(x, y):
     """
         Returns the larger of two numbers.
@@ -354,6 +527,19 @@ def max(x, y):
             return y
         return x
     raise TypeError("the parameters are not numbers")
+=======
+def Max(x, y):
+    """
+    picks the largest value between x and y
+    :param x:
+    :param y:
+    :return: x if x is larger than y, y otherwise
+    """
+    if x <= y:
+        return y
+    return x
+
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
 
 
 if __name__ == "__main__":
@@ -369,9 +555,18 @@ if __name__ == "__main__":
     print(not_equal(5, 2))
     print(greater(5, 2))
     print(less(5, 2))
+<<<<<<< HEAD
     print(Or(5 % 2, 2 % 2))
     print(pow(5, 2))
     print(sqrt(4))
     print(min(5, 2))
     print(max(5, 2))
     print(And(5 % 2, 2 % 2))
+=======
+    print(Or(5%2, 2%2))
+    print(power(5, 2))
+    print(sqrt(4))
+    print(Min(5, 2))
+    print(Max(5, 2))
+    print(And(5%2, 2%2))
+>>>>>>> ef81074ef3e2781a81d048ed14a268024f4cf937
