@@ -289,7 +289,7 @@ def pow(x, y):
     raise TypeError("the parameters are not numbers")
 
 
-# Square (x^0.5) - add to rules
+# Square - add to rules - used as a built in function, not operator
 def sqrt(x):
     """
         Returns the square root of a number.

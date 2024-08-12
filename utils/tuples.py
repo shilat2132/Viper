@@ -14,7 +14,7 @@ class Tuple:
                 *args: The values to be stored in the tuple.
                 """
 
-        self._values = args
+        self.values = args
 
     def __getitem__(self, index):
         """
@@ -80,7 +80,7 @@ class Tuple:
         else:
             raise AttributeError("Cannot modify CustomTuple")
 
-    def __add__(self, other):
+    def add(self, other):
         """
                 Concatenates this CustomTuple with another.
 
@@ -95,7 +95,7 @@ class Tuple:
                 """
 
         if isinstance(other, Tuple):
-            return Tuple(*(self._values + other._values))
+            return Tuple(*(self.values + other.values))
         raise TypeError("Can only concatenate CustomTuple with another CustomTuple")
 
     def index(self, value):

@@ -40,7 +40,8 @@ class Viper:
 
 
 code = """
-x= True
+x=min(a, 5)
+df.isUpper(y, z, 2)
 """
 Viper(code).interperter()
 

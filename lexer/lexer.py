@@ -13,108 +13,190 @@ class Token(object):
 
 def tokenize(line):
  
+#     pattern = r'''
+#      \s*                             # Optional leading whitespace
+#     (
+#         "(?:[^"\\]|\\.)*"           # Group 1: Quoted strings with escaped characters
+#     )
+#     |
+#     (
+#         \b(?:while|for|if|else|function|return|null|in)\b  # Group 2: Control flow keywords (whole words)
+#     )
+#     |
+#     (
+#         \b(?:true|false)\b          # Group 3: Boolean literals
+#     )
+#     |
+#     (
+#         (?:<=|<|>=|>|==|!=|&&|\|\||!|)    # Group 4: Logical operators
+#     )
+#     |
+#     (
+#         \d+\.\d+|\d+                # Group 5: Numeric literals (numbers, including floats)
+#     )
+#     |
+#     (
+#         [+*/^-]                   # Group 6: Arithmetic operators
+#     )
+#     |
+#     (
+#         \b(?:range|print|max|min|sqrt)\b                        # Group 7: Identifiers (including those with numbers)
+#     )
+#     |
+#     ( \((?:\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\)) #Group 8: tuple
+#     |
+#     (\[(?:\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\])  
+#     #Group 9: array 
+#     |
+#     ([=]) #Group 10: assign
+#     |
+#     (\() #Group 11: openParen
+#     |
+#     (\)) #Group 12: closeParen
+#     |
+#     (\{) #Group 13: scopeOpenParen
+#     |
+#     (\}) #Group 14: scopeCloseParen
+#     |
+#     (\w+\.(REPLACE|isUpper|isLower|CONCAT|split)) # Group 15: stringMethods
+#     |
+#     ((?P<method>(length|index|get|addItem|append|remove))(\s*\(.*?\))?) # Group 16: ArraysFunctions
+#     |
+#     ((?P<method>(__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple))(\s*\(.*?\))?) 
+#     # Group 17: TuplesFunctions
+#     |
+#     (
+#         \w*[a-zA-Z]\w*                         # Group 18: Identifiers (including those with numbers)
+#     )
+#     |
+#     (
+#         \S  # Group 19: Any non-whitespace character (lexical error)
+#     )
+#     \s*                             
+# '''
+
     pattern = r'''
-     \s*                             # Optional leading whitespace
+    \s*                                # Optional leading whitespace
     (
-        "(?:[^"\\]|\\.)*"           # Group 1: Quoted strings with escaped characters
+        (?P<string>"(?:[^"\\]|\\.)*")  # Group 1: Quoted strings with escaped characters
     )
     |
     (
-        \b(?:while|for|if|else|print|function|return|null|in|range)\b  # Group 2: Control flow keywords (whole words)
+        (?P<keyword>\b(?:while|for|if|else|function|return|null|in)\b)  # Group 2: Control flow keywords
     )
     |
     (
-        \b(?:true|false)\b          # Group 3: Boolean literals
+        (?P<boolean>\b(?:true|false)\b)  # Group 3: Boolean literals
     )
     |
     (
-        (?:<=|<|>=|>|==|!=|&&|\|\||!|)    # Group 4: Logical operators
+        (?P<logical_operator>(?:<=|<|>=|>|==|!=|&&|\|\||!))  # Group 4: Logical operators
     )
     |
     (
-        \d+\.\d+|\d+                # Group 5: Numeric literals (numbers, including floats)
+        (?P<number>\d+\.\d+|\d+)  # Group 5: Numeric literals (numbers, including floats)
     )
     |
     (
-        [+*/^-]                   # Group 6: Arithmetic operators
+        (?P<operator>[+*/^-])  # Group 6: Arithmetic operators
     )
     |
     (
-        \w*[a-zA-Z]\w*                         # Group 7: Identifiers (including those with numbers)
+        (?P<builtinFunc>\b(?:range|print|max|min|sqrt)\b)  # Group 7: Built-in functions
     )
     |
-    ( \((?:\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\)) #Group 8: tuple
-    |
-    (\[(?:\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\])  
-    #Group 9: array 
-    |
-    ([=]) #Group 10: assign
-    |
-    (\() #Group 11: openParen
-    |
-    (\)) #Group 12: closeParen
-    |
-    (\{) #Group 13: scopeOpenParen
-    |
-    (\}) #Group 14: scopeCloseParen
-    |
-    (\w+\.(REPLACE|isUpper|isLower|CONCAT|split)) # Group 17: stringFunctions
-    |
-    ((?P<method>(length|index|get|addItem|append|remove))(\s*\(.*?\))?) # Group 18: ArraysFunctions
-    |
-    ((?P<method>(__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple))(\s*\(.*?\))?) 
-    # Group 19: TuplesFunctions
+    (
+        (?P<tuple>\((?:\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\))  # Group 8: Tuple
+    )
     |
     (
-        \S  # Group 20: Any non-whitespace character (lexical error)
+        (?P<array>\[(?:\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\])  # Group 9: Array
+    )
+    |
+    (
+        (?P<assign>[=])  # Group 10: Assignment operator
+    )
+    |
+    (
+        (?P<openParen>\()  # Group 11: Open parenthesis
+    )
+    |
+    (
+        (?P<closeParen>\))  # Group 12: Close parenthesis
+    )
+    |
+    (
+        (?P<scopeOpenParen>\{)  # Group 13: Open curly brace
+    )
+    |
+    (
+        (?P<scopeCloseParen>\})  # Group 14: Close curly brace
+    )
+    |
+   # Group 15: String methods
+    \w*[a-zA-Z]\w*\.(?P<stringMethod>REPLACE|isUpper|isLower|CONCAT|split)
+    |
+    # Group 16: Array methods
+    \w*[a-zA-Z]\w*\.(?P<arrayMethod>length|index|get|addItem|append|remove)
+
+    |
+    # Group 17: Tuple methods
+    \w*[a-zA-Z]\w*\.(?P<tupleMethod>__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple)
+    |
+    (
+        (?P<identifier>\w*[a-zA-Z]\w*)  # Group 18: Identifiers
+    )
+    |
+    (
+        (?P<error>\S)  # Group 19: Any non-whitespace character (lexical error)
     )
     \s*                             
 '''
+
     
     tokens = []
     for match in re.finditer(pattern, line, re.VERBOSE):
-        if match.group(1): 
-            tokens.append(Token('string', match.group(1)[1:-1]))  # Remove quotes
-        elif match.group(2):  
-            tokens.append(Token('keyword', match.group(2)))
-        elif match.group(3): 
-            tokens.append(Token('boolean', match.group(3)))
-        elif match.group(4):  
-            tokens.append(Token('logical_operator', match.group(4)))
-        elif match.group(5): 
-            if "." in match.group(5): val = float(match.group(5))
-            else: val = int(match.group(5))
+        if match.group('string'): 
+            tokens.append(Token('string', match.group('string')[1:-1]))  # Remove quotes
+        elif match.group('keyword'):  
+            tokens.append(Token('keyword', match.group('keyword')))
+        elif match.group('boolean'): 
+            tokens.append(Token('boolean', match.group('boolean')))
+        elif match.group('logical_operator'):  
+            tokens.append(Token('logical_operator', match.group('logical_operator')))
+        elif match.group('number'): 
+            val = float(match.group('number')) if "." in match.group('number') else int(match.group('number'))
             tokens.append(Token('number', val))
-        elif match.group(6): 
-            tokens.append(Token('operator', match.group(6)))
-        elif match.group(7):  
-            tokens.append(Token('identifier', match.group(7)))
-        elif match.group(8):
-            tokens.append(Token('tuple', match.group(8)))
-        elif match.group(9):
-            tokens.append(Token('array', match.group(9)))
-        elif match.group(10):
-            tokens.append(Token('assign', match.group(10)))
-        elif match.group(11):
-            tokens.append(Token('openParen', match.group(11)))
-        elif match.group(12):
-            tokens.append(Token('closeParen', match.group(12)))
-        elif match.group(13):
-            tokens.append(Token('scopeOpenParen', match.group(13)))
-        elif match.group(14):
-            tokens.append(Token('closeParen', match.group(14)))
-        elif match.group(15):
-            tokens.append(Token('scopeOpenParen', match.group(15)))
-        elif match.group(16):
-            tokens.append(Token('scopeCloseParen', match.group(16)))
-        elif match.group(17):
-            tokens.append(Token('stringFunctions', match.group(17)))
-        elif match.group(18):
-            tokens.append(Token('arrayFunctions', match.group(18)))
-        elif match.group(19):
-            tokens.append(Token('tupleFunctions', match.group(19)))
-        elif match.group(20):  # Unexpected symbols
-            raise SyntaxError(f"Unexpected token: {match.group(20)}")
+        elif match.group('operator'): 
+            tokens.append(Token('operator', match.group('operator')))
+        elif match.group('builtinFunc'):  
+            tokens.append(Token('builtinFunc', match.group('builtinFunc')))
+        elif match.group('tuple'): 
+            tokens.append(Token('tuple', match.group('tuple')))
+        elif match.group('array'): 
+            tokens.append(Token('array', match.group('array')))
+        
+        elif match.group('assign'): 
+            tokens.append(Token('assign', match.group('assign')))
+        elif match.group('openParen'): 
+            tokens.append(Token('openParen', match.group('openParen')))
+        elif match.group('closeParen'): 
+            tokens.append(Token('closeParen', match.group('closeParen')))
+        elif match.group('scopeOpenParen'): 
+            tokens.append(Token('scopeOpenParen', match.group('scopeOpenParen')))
+        elif match.group('scopeCloseParen'): 
+            tokens.append(Token('scopeCloseParen', match.group('scopeCloseParen')))
+        elif match.group('stringMethod'):
+            tokens.append(Token('stringMethod', match.group('stringMethod')))
+        elif match.group('arrayMethod'):
+            tokens.append(Token('arrayMethod', match.group('arrayMethod')))
+        elif match.group('tupleMethod'):
+            tokens.append(Token('tupleMethods', match.group('tupleMethod')))
+        elif match.group('identifier'):
+            tokens.append(Token('identifier', match.group('identifier')))
+        elif match.group('error'):  # Unexpected symbols
+            raise SyntaxError(f"Unexpected token: {match.group('error')}")
+
     
     return tokens
 
