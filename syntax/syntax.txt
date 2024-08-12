@@ -5,7 +5,9 @@ The parser should follow the grammar rules defined for the language.
 
 
 grammar rules:
-#STATEMENTS - function call for assign
+#STATEMENTS - methods for assign/call/term/return
+
+AFTER BUILDING REGEX FOR BUILTIN FUNCTIONS - ENSURE THAT FUNCTION CALLS CAN ONLY BE DONE WITH KEYWORDS OF THOSE FUNCTIONS
 *return statement: type: "return", children: [what to return: literal/identifier/expression/ nothing]
 *assign: value of "assign", children: [target: identifier, source: expression/literal/function call]
 DONT FORGET TO ALLOW ASSIGNMENT WITH A FUNCTION CALL 

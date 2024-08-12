@@ -27,7 +27,7 @@ class Viper:
     
     def interperter(self):
         Viper.tokens = lexer(self.stringCode) # type: ignore
-        # print(Viper.tokens[0])
+        # print(Viper.tokens[4])
         # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
         # for v in Viper.tokens:
         #     print(v)
@@ -40,12 +40,7 @@ class Viper:
 
 
 code = """
-x = (x+3)^2
-y = sx
-isTrue = true
-if (x<=5) && isTrue{
-print("some str")
-}
+x= True
 """
 Viper(code).interperter()
 

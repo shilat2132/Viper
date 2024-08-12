@@ -18,17 +18,19 @@ def argsToList(args: str)->list:
     return args
 
 # needs to add for lists and tuples - maybe
-def tokenizeLiteralAndIdentifier(literal):
+def tokenizeLiteralAndIdentifier(literal:str):
     """
     gets a string and returns its token, raise an error if it's not a literal or identifier
     """
-    number_pattern = r'^\d+\.\d+|\d+$'  # Matches integers (positive only)
+    number_pattern = r'^\d+\.\d+|\d+$'  # Matches integers
     string_pattern = r'^".*"$'  # Matches strings enclosed in double quotes
     boolean_pattern = r'^(true|false)$'  # Matches boolean values
     identifier_pattern = r'^[a-zA-Z]\w*$'  # Matches identifiers (letters, numbers, underscores)
 
     if re.match(number_pattern, literal):
-        return Token("number", literal)
+        if "." in literal: val = float(literal)
+        else: val = int(literal)
+        return Token("number", val)
     
     if re.match(string_pattern, literal):
         return Token("string", literal)
