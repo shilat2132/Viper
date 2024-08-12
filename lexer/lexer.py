@@ -132,20 +132,23 @@ def tokenize(line):
     (
         (?P<scopeCloseParen>\})  # Group 14: Close curly brace
     )
-    |
-   # Group 15: String methods
-    \w*[a-zA-Z]\w*\.(?P<stringMethod>REPLACE|isUpper|isLower|CONCAT|split)
-    |
-    # Group 16: Array methods
-    \w*[a-zA-Z]\w*\.(?P<arrayMethod>length|index|get|addItem|append|remove)
-
-    |
-    # Group 17: Tuple methods
-    \w*[a-zA-Z]\w*\.(?P<tupleMethod>__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple)
-    |
+     |
     (
         (?P<identifier>\w*[a-zA-Z]\w*)  # Group 18: Identifiers
     )
+    |
+    
+   # Group 15: String methods
+    (?P<stringMethod>\.(REPLACE|isUpper|isLower|CONCAT|split))
+
+
+    |
+    # Group 16: Array methods
+    (?P<arrayMethod>\.(length|index|get|addItem|append|remove))
+
+    |
+    # Group 17: Tuple methods
+    (?P<tupleMethod>\.(__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple))
     |
     (
         (?P<error>\S)  # Group 19: Any non-whitespace character (lexical error)
@@ -161,7 +164,8 @@ def tokenize(line):
         elif match.group('keyword'):  
             tokens.append(Token('keyword', match.group('keyword')))
         elif match.group('boolean'): 
-            tokens.append(Token('boolean', match.group('boolean')))
+            val = True if match.group('boolean') == "true" else False
+            tokens.append(Token('boolean', val))
         elif match.group('logical_operator'):  
             tokens.append(Token('logical_operator', match.group('logical_operator')))
         elif match.group('number'): 
@@ -175,7 +179,6 @@ def tokenize(line):
             tokens.append(Token('tuple', match.group('tuple')))
         elif match.group('array'): 
             tokens.append(Token('array', match.group('array')))
-        
         elif match.group('assign'): 
             tokens.append(Token('assign', match.group('assign')))
         elif match.group('openParen'): 
@@ -186,14 +189,15 @@ def tokenize(line):
             tokens.append(Token('scopeOpenParen', match.group('scopeOpenParen')))
         elif match.group('scopeCloseParen'): 
             tokens.append(Token('scopeCloseParen', match.group('scopeCloseParen')))
-        elif match.group('stringMethod'):
-            tokens.append(Token('stringMethod', match.group('stringMethod')))
-        elif match.group('arrayMethod'):
-            tokens.append(Token('arrayMethod', match.group('arrayMethod')))
-        elif match.group('tupleMethod'):
-            tokens.append(Token('tupleMethods', match.group('tupleMethod')))
         elif match.group('identifier'):
             tokens.append(Token('identifier', match.group('identifier')))
+        elif match.group('stringMethod'):
+            tokens.append(Token('stringMethod', match.group('stringMethod')[1:]))
+        elif match.group('arrayMethod'):
+            tokens.append(Token('arrayMethod', match.group('arrayMethod')[1:]))
+        elif match.group('tupleMethod'):
+            tokens.append(Token('tupleMethod', match.group('tupleMethod')[1:]))
+   
         elif match.group('error'):  # Unexpected symbols
             raise SyntaxError(f"Unexpected token: {match.group('error')}")
 

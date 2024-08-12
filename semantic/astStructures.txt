@@ -1,7 +1,41 @@
+Term:
+a node with no children with type of: literal, var, function/method call
+
 assign:
+    type: assign
     children:
-    1. target as a var
-    2. source - can be expression/function call
+        1. target as a var
+        2. source - can be expression/function call/ DONT FORGET METHOD CALL
+
+functionCall:
+    type: functionCall
+    value: funcName
+    children:
+        1. args: node with children of the args, might be any literal/identifier/expression
+
+methodCall:
+    type: methodCall
+    value: methodName
+    children:
+        1. the object the method is performed at
+        2. args: node with children of the args, might be any literal/identifier/expression
+
+return:
+    type: return
+    children: one child - can be expression/term
+
+if:
+    type: if
+    children: 
+        1. condition - expression/term
+        2. body - must have
+        3. else block - if exists with body of blocks
+
+while:
+    type: while
+    children: 
+        1. condition - expression/term
+        2. body - must have
 
 for loop:
     children:
@@ -9,3 +43,9 @@ for loop:
     2. iterable, range would have a str tuple args
     3. body
 
+function definition:
+    type: functionDef
+    value: funcName
+    children:
+        1. args
+        2. body

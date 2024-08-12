@@ -71,17 +71,26 @@ class Parser:
                 return self.tokensMatrix[self.currentLine+1][0]
         return -1
 
-    def parseFunctionCall(self, funcName)->AstNode:
+    def parseFunctionCall(self, name, isMethod = False, obj = None)->AstNode:
         """
-        creating a node of a functionCall with the funcName as value and its args as node with children
+        creating a node of a functionCall/methodCall with the name as value and its 
+        args as node with children. if it's a method, add a node for the object
         Params:
-        funcName - the name of the function being called
+        name - the name of the function/method being called
+        isMethod - is that a method call or a function call
+        obj - if it's a method, that would be the object the method is performed on
         Returns:
         the functionCall node
         """
-        funcNode = AstNode("functionCall", funcName)
+        mainNode = AstNode("functionCall" if not isMethod else "methodCall", name)
+        if isMethod:
+            mainNode.addChild(AstNode("var", obj.value))
+        self.parseArgs(mainNode)
+        return mainNode
+
+    def parseArgs(self, mainNode: AstNode, isDef = False):
         argsNode = AstNode("args")
-        funcNode.addChild(argsNode)
+        mainNode.addChild(argsNode)
 
         # consume the token of args represented by a string in a format of tuple, converts it to a list of args
         args = self.consumeToken()
@@ -89,13 +98,15 @@ class Parser:
 
         # for each parameter, tokenize it and adds it as a child node to the args node
         for arg in args:
-            argNode = self.parseTerm(tokenizeLiteralAndIdentifier(arg)) # type: ignore
+            argNode = self.parseTerm(tokenizeLiteralAndIdentifier(arg, isDef)) # type: ignore
             argsNode.addChild(argNode)
-        return funcNode
-
+        
     def parseExp(self, parenthesesAmount=0)->Tuple[AstNode, int] | None:
         """
         creates a subTree recursively for expression: either arithmetical or logical
+        Returns: 
+        the subtree and the number of parenthases after incrementing if met with ( and decrementing if met with )
+        helps for checking parenthases syntax
         """
         currentToken = self.consumeToken()
         if currentToken:
@@ -105,7 +116,8 @@ class Parser:
                 negationExp, parenthesesAmount = self.parseExp(parenthesesAmount)
                 return AstNode("logicalExp", Parser.operatorsDict["!"], [negationExp]), parenthesesAmount
             else:
-                op1 = self.parseTerm(currentToken) 
+                op1 = self.parseTerm(currentToken)
+        # expressions must have at least 1 operand
         else: raise SyntaxError(f"syntax Error in line {self.currentLine}")
          
         operator = self.consumeToken()
@@ -126,21 +138,32 @@ class Parser:
     
     def parseTerm(self, currentToken)->AstNode:
         """
-        expects to recieve an identifier, literal or a function call, raise an error if not
+        expects to recieve an identifier, literal, method call or a function call, raise an error if not
         Params: current token
         Returns:
         an ast node of the term
         """
         if not currentToken: return None
-        if (currentToken.type=="identifier" or currentToken.type=="keyword"):  
+        # checks if the term is a function call
+        if (currentToken.type=="identifier" or currentToken.type=="builtinFunc"):
+            # call must be following the function name on the same line, so consuming the 
+                # token but then move position backwards in case it's not really a function call
             nextToken = self.consumeToken()
             self.currentIndex -=1
             if nextToken and nextToken.type == "tuple":
+                # self.currentIndex +=1
                 return self.parseFunctionCall(currentToken.value)
-            elif currentToken.type == 'identifier':
-                self.currentIndex +=1
-                return AstNode('var', currentToken.value)
+           
 
+        if currentToken.type =="identifier":
+            nextToken = self.consumeToken()
+            self.currentIndex -=1
+            if nextToken and nextToken.type in ["stringMethod", "arrayMethod", "tupleMethod"]:
+                methodName = self.consumeToken().value
+                return self.parseFunctionCall(methodName, True, currentToken)
+        
+        if currentToken.type == 'identifier':
+                return AstNode('var', currentToken.value)
         
         elif currentToken.type == 'number':
             return AstNode('Number', currentToken.value)
@@ -156,15 +179,26 @@ class Parser:
             raise SyntaxError(f"Unexpected token: '{currentToken.value}' in line {self.currentLine} col {self.currentIndex-1}")
 
     def parseBlock(self, parentNode):
+        """
+        ensures that each scope is wrapped with {}
+        raise an error if body's missing or {} missing
+
+        creates a node representing a scope body with parsed statements and adds it to the parentNode
+        
+        Params:
+        parentNode - the node to add the body node to
+
+        """
         bodyBlockNode = AstNode("body")
         nextToken=self.consumeToken()
         if not nextToken:
             if not self.nextLine(): #if former line finished and so is the code, then syntax error
-                raise SyntaxError(f"Missing body of loop")
-            nextToken = self.consumeToken()
-        # if we moved to next line but code isn't finished
+                raise SyntaxError(f"Missing body of a scope")
+            nextToken = self.consumeToken()  # if we moved to next line but code isn't finished
+       
         if nextToken.type != "scopeOpenParen":
             raise SyntaxError(f"scopes must have opening parentheses, line {self.currentLine}")
+        
         endCode = False
         nextToken = self.peekToken()
         # reached end of code with no '}'
@@ -185,16 +219,23 @@ class Parser:
         if isNotCloseParenth: 
             raise SyntaxError("Missing '}'")
         self.consumeToken() #if we reached here it means we are on the } and need to consume it
+        if len(bodyBlockNode.children)==0:
+            raise SyntaxError(f"Missing body of a scope")
         parentNode.addChild(bodyBlockNode)
  
     
-    def parseStatement(self):
+    def parseStatement(self)-> AstNode:
+        """
+        parses the current statements, checks for syntax errors
+        Returns: AstNode representing the statement
+        """
         parent = self.consumeToken()
         nextToken = self.peekToken()
-        if nextToken ==-1:
+
+        if nextToken ==-1: #prevents having a line with only one element because it's meanningless
             raise SyntaxError(f"Unresolved statement in line {self.currentLine-1}")
         
-        # assign
+        # assign - creates a node of 2 children - target and source, source could be either a term or expression
         if parent.type == "identifier" and nextToken.type == "assign":
             node = AstNode("assign", None, [AstNode("var", parent.value)])
             self.consumeToken() #forward the position from the assign token
@@ -203,13 +244,22 @@ class Parser:
             node.addChild(source)
             return node
         
-        # function call - keyword is for build in functions such as print and range
-        if (parent.type=="identifier" or parent.type=="keyword") and nextToken.type == "tuple":
+        # function call - built in like min(x,y) or custom like fun(1, "2")
+        if (parent.type=="identifier" or parent.type=="builtinFunc") and nextToken.type == "tuple":
             return self.parseFunctionCall(parent.value)
+        
+         # method call - a.append(args)
+        if parent.type =="identifier" and nextToken.type in ["stringMethod", "arrayMethod", "tupleMethod"]:
+            methodName = self.consumeToken().value
+            return self.parseFunctionCall(methodName, True, parent)
         
         # return statement
         if parent.type == "keyword" and parent.value == "return":
-            returnStatementNode = AstNode("returnStatement")
+            returnStatementNode = AstNode("return")
+            if nextToken.value=="null":
+                returnStatementNode.addChild(AstNode("returnValue", "null"))
+                return returnStatementNode
+            
             returnValueNode, parenthasesAmount = self.parseExp()
             checkParenthasesValidation(self.currentLine, parenthasesAmount) # type: ignore
             if returnValueNode != None:
@@ -270,6 +320,17 @@ class Parser:
 
             self.parseBlock(forNode)
             return forNode
+        
+        # function definition - function funcName(args){statements}
+        if parent.value=="function" and nextToken.type == "identifier":
+            funcNode = AstNode("functionDef", nextToken.value)
+            self.consumeToken() #consumes the function name
+            self.parseArgs(funcNode, True)
+            self.parseBlock(funcNode)
+            return funcNode
+
+        
+        raise SyntaxError(f"line {self.currentLine}: illegal statement")
 
 
     def parse(self):

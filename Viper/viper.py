@@ -38,10 +38,9 @@ class Viper:
            
 
 
-
+# chec; what's wrong
 code = """
-x=min(a, 5)
-df.isUpper(y, z, 2)
+x = min(y)
 """
 Viper(code).interperter()
 
