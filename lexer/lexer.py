@@ -60,8 +60,15 @@ def tokenize(line):
     |
     (\}) #Group 16: scopeCloseParen
     |
+    (\w+\.(REPLACE|isUpper|isLower|CONCAT|split)) # Group 17: stringFunctions
+    |
+    ((?P<method>(length|index|get|addItem|append|remove))(\s*\(.*?\))?) # Group 18: ArraysFunctions
+    |
+    ((?P<method>(__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple))(\s*\(.*?\))?) 
+    # Group 19: TuplesFunctions
+    |
     (
-        \S  # Group 17: Any non-whitespace character (lexical error)
+        \S  # Group 20: Any non-whitespace character (lexical error)
     )
     \s*                             
 '''
@@ -100,8 +107,14 @@ def tokenize(line):
             tokens.append(Token('scopeOpenParen', match.group(15)))
         elif match.group(16):
             tokens.append(Token('scopeCloseParen', match.group(16)))
-        elif match.group(17):  # Unexpected symbols
-            raise SyntaxError(f"Unexpected token: {match.group(17)}")
+        elif match.group(17):
+            tokens.append(Token('stringFunctions', match.group(17)))
+        elif match.group(18):
+            tokens.append(Token('arrayFunctions', match.group(18)))
+        elif match.group(19):
+            tokens.append(Token('tupleFunctions', match.group(19)))
+        elif match.group(20):  # Unexpected symbols
+            raise SyntaxError(f"Unexpected token: {match.group(20)}")
     
     return tokens
 
