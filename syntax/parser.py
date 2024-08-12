@@ -5,6 +5,22 @@ from utils import *
 
 
 class Parser:
+    operatorsDict = {
+        "<=": "lessEquals",
+        "<": "less",
+        ">=": "greaterEquals",
+        ">": "greater" ,
+        "==": "equal" ,
+        "!=": "not_equal",
+        "&&": "And",
+        "||": "Or",
+        "!": "negate",
+        "+": "add",
+        "-": "sub",
+        "*": "mul",
+        "/": "div",
+        "^": "pow"
+    }
     def __init__(self, tokensMatrix):
         self.tokensMatrix = tokensMatrix
         self.currentLine = 0
@@ -81,10 +97,10 @@ class Parser:
                 op1, parenthesesAmount = self.parseExp(parenthesesAmount+1)
             elif currentToken.type =="logical_operator" and currentToken.value =="!":
                 negationExp, parenthesesAmount = self.parseExp(parenthesesAmount)
-                return AstNode("logicalExp", "!", [negationExp]), parenthesesAmount
+                return AstNode("logicalExp", Parser.operatorsDict["!"], [negationExp]), parenthesesAmount
             else:
                 op1 = self.parseTerm(currentToken) 
-        else: return None #if currentToken is None then we reached the end of the line
+        else: raise SyntaxError(f"syntax Error in line {self.currentLine}")
          
         operator = self.consumeToken()
         if operator and operator.type == "closeParen":
@@ -100,7 +116,7 @@ class Parser:
 
       
         expType = "arithmeticExp" if operator.type == "operator" else "logicalExp"
-        return AstNode(expType, operator.value, [op1, op2]), parenthesesAmount
+        return AstNode(expType, Parser.operatorsDict[operator.value], [op1, op2]), parenthesesAmount
     
     def parseTerm(self, currentToken)->AstNode:
         """

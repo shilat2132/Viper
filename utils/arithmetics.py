@@ -41,7 +41,7 @@ def sub(x, y):
     print("the parameters are not numbers")
     return
 
-
+#
 # Mul(x*y)
 def mul(x, y):
     """
@@ -89,7 +89,7 @@ def div(x, y):
 
 
 # Assign(x=y) variables are in dictionary
-def assign(varsDict: dict, x, y):
+def assign(varsDict: dict, x: str, y):
     """
         Assigns the value of y to the variable x in the provided dictionary.
 
@@ -245,7 +245,7 @@ def Or(x, y):
         bool: True if either x or y is True, otherwise False.
         """
 
-    if x or y == 1:
+    if x or y:
         return True
     return False
 
@@ -289,7 +289,7 @@ def pow(x, y):
     raise TypeError("the parameters are not numbers")
 
 
-# Square (x^0.5)
+# Square (x^0.5) - add to rules
 def sqrt(x):
     """
         Returns the square root of a number.

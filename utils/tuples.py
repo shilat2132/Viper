@@ -136,19 +136,6 @@ class Tuple:
         for _ in self._values:
             count += 1
         return count
-    # static function
-    def rangeTuple(end, start=0):
-        """
-                Generates a range tuple from start to end.
-
-                Parameters:
-                end (int): The end of the range (exclusive).
-                start (int, optional): The start of the range (inclusive). Defaults to 0.
-
-                Returns:
-                range: A range object.
-                """
-
-        return range(start, end)
+    
 
 

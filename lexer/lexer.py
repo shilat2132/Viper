@@ -4,7 +4,7 @@ class Token(object):
     def __init__(self, type, value):
         self.type = type
         self.value = value
-        # x = 5 -> {"identifier", x}, {operator, =}
+        # x = 5 -> {"identifier", x}, {"operator", =}, {"number", 5}
 
     def __repr__(self):
         return "Token(type: %s, value: %s)" % (self.type, self.value)
@@ -12,6 +12,7 @@ class Token(object):
 
 
 def tokenize(line):
+ 
     pattern = r'''
      \s*                             # Optional leading whitespace
     (
@@ -35,7 +36,7 @@ def tokenize(line):
     )
     |
     (
-        [+*/%^-]                   # Group 6: Arithmetic operators
+        [+*/^-]                   # Group 6: Arithmetic operators
     )
     |
     (
@@ -74,7 +75,9 @@ def tokenize(line):
         elif match.group(4):  
             tokens.append(Token('logical_operator', match.group(4)))
         elif match.group(5): 
-            tokens.append(Token('number', match.group(5)))
+            if "." in match.group(5): val = float(match.group(5))
+            else: val = int(match.group(5))
+            tokens.append(Token('number', val))
         elif match.group(6): 
             tokens.append(Token('operator', match.group(6)))
         elif match.group(7):  

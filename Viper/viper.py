@@ -27,11 +27,12 @@ class Viper:
     
     def interperter(self):
         Viper.tokens = lexer(self.stringCode) # type: ignore
-        print(Viper.tokens[0])
+        # print(Viper.tokens[0])
         # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
-        Parser(Viper.tokens).parse() # type: ignore
         # for v in Viper.tokens:
         #     print(v)
+        Parser(Viper.tokens).parse() # type: ignore
+       
         # print(Viper.dispatch["CONCAT"]("strings"," are fun"))
 
            
@@ -39,9 +40,12 @@ class Viper:
 
 
 code = """
-for i in range(f){
-    y = y+2
-    }
+x = (x+3)^2
+y = sx
+isTrue = true
+if (x<=5) && isTrue{
+print("some str")
+}
 """
 Viper(code).interperter()
 
