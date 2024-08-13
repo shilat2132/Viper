@@ -13,68 +13,6 @@ class Token(object):
 
 def tokenize(line):
  
-#     pattern = r'''
-#      \s*                             # Optional leading whitespace
-#     (
-#         "(?:[^"\\]|\\.)*"           # Group 1: Quoted strings with escaped characters
-#     )
-#     |
-#     (
-#         \b(?:while|for|if|else|function|return|null|in)\b  # Group 2: Control flow keywords (whole words)
-#     )
-#     |
-#     (
-#         \b(?:true|false)\b          # Group 3: Boolean literals
-#     )
-#     |
-#     (
-#         (?:<=|<|>=|>|==|!=|&&|\|\||!|)    # Group 4: Logical operators
-#     )
-#     |
-#     (
-#         \d+\.\d+|\d+                # Group 5: Numeric literals (numbers, including floats)
-#     )
-#     |
-#     (
-#         [+*/^-]                   # Group 6: Arithmetic operators
-#     )
-#     |
-#     (
-#         \b(?:range|print|max|min|sqrt)\b                        # Group 7: Identifiers (including those with numbers)
-#     )
-#     |
-#     ( \((?:\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\)) #Group 8: tuple
-#     |
-#     (\[(?:\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\])  
-#     #Group 9: array 
-#     |
-#     ([=]) #Group 10: assign
-#     |
-#     (\() #Group 11: openParen
-#     |
-#     (\)) #Group 12: closeParen
-#     |
-#     (\{) #Group 13: scopeOpenParen
-#     |
-#     (\}) #Group 14: scopeCloseParen
-#     |
-#     (\w+\.(REPLACE|isUpper|isLower|CONCAT|split)) # Group 15: stringMethods
-#     |
-#     ((?P<method>(length|index|get|addItem|append|remove))(\s*\(.*?\))?) # Group 16: ArraysFunctions
-#     |
-#     ((?P<method>(__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple))(\s*\(.*?\))?) 
-#     # Group 17: TuplesFunctions
-#     |
-#     (
-#         \w*[a-zA-Z]\w*                         # Group 18: Identifiers (including those with numbers)
-#     )
-#     |
-#     (
-#         \S  # Group 19: Any non-whitespace character (lexical error)
-#     )
-#     \s*                             
-# '''
-
     pattern = r'''
     \s*                                # Optional leading whitespace
     (
@@ -139,16 +77,16 @@ def tokenize(line):
     |
     
    # Group 15: String methods
-    (?P<stringMethod>\.(REPLACE|isUpper|isLower|CONCAT|split))
+    \b(?P<stringMethod>\.(REPLACE|isUpper|isLower|CONCAT|split))
 
 
     |
     # Group 16: Array methods
-    (?P<arrayMethod>\.(length|index|get|addItem|append|remove))
+    \b(?P<arrayMethod>\.(length|index|get|addItem|append|remove))
 
     |
     # Group 17: Tuple methods
-    (?P<tupleMethod>\.(__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple))
+    \b(?P<tupleMethod>\.(__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple))
     |
     (
         (?P<error>\S)  # Group 19: Any non-whitespace character (lexical error)
@@ -204,15 +142,15 @@ def tokenize(line):
     
     return tokens
 
-def lexer(code: str):
-    codeTokensList = []
+def lexer(code: str, tokens: list):
+    # codeTokensList = []
     # split to lines
     lines = code.split("\n")
     # for each line classify to tokens with regex
     for line in lines:
         if len(line)>0:
             lineTokens = tokenize(line)
-            codeTokensList.append(lineTokens)
+            tokens.append(lineTokens)
     
-    return codeTokensList
+    return tokens
     

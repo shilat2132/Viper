@@ -16,7 +16,7 @@ def add(x, y):
 
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x + y
-    print("the parameters are not numbers")
+    raise TypeError("the parameters are not numbers")
     return
 
 
@@ -38,7 +38,7 @@ def sub(x, y):
 
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x - y
-    print("the parameters are not numbers")
+    raise TypeError("the parameters are not numbers")
     return
 
 #
@@ -60,7 +60,7 @@ def mul(x, y):
 
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x * y
-    print("the parameters are not numbers")
+    raise TypeError("the parameters are not numbers")
     return
 
 
@@ -82,11 +82,96 @@ def div(x, y):
         """
 
     if y == 0:
-        raise ArithmeticError("ZeroDivisionError - cannot divide by zero")
+        raise ArithmeticError("cannot divide by zero")
     if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
         return x / y
     raise TypeError("the parameters are not numbers")
 
+# Power (x^y)
+def pow(x, y):
+    """
+        Raises the first number to the power of the second number.
+
+        Parameters:
+        x (int or float): The base number.
+        y (int or float): The exponent.
+
+        Returns:
+        int or float: The result of x raised to the power of y.
+
+        Raises:
+        TypeError: If the parameters are not numbers.
+        """
+
+    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
+        return x ** y
+    raise TypeError("the parameters are not numbers")
+
+
+# Square - add to rules - used as a built in function, not operator
+def sqrt(x):
+    """
+        Returns the square root of a number.
+
+        Parameters:
+        x (int or float): The number to find the square root of.
+
+        Returns:
+        float: The square root of x.
+
+        Raises:
+        TypeError: If the parameter is not a number.
+        """
+
+    if isinstance(x, int) or isinstance(x, float):
+        return x ** 0.5
+    raise TypeError("the parameters are not numbers")
+
+
+# Min (x,y)
+def min(x, y):
+    """
+        Returns the smaller of two numbers.
+
+        Parameters:
+        x (int or float): The first number.
+        y (int or float): The second number.
+
+        Returns:
+        int or float: The smaller of x and y.
+
+        Raises:
+        TypeError: If the parameters are not numbers.
+        """
+
+    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
+        if x <= y:
+            return x
+        return y
+    raise TypeError("the parameters are not numbers")
+
+
+# Max (x,y)
+def max(x, y):
+    """
+        Returns the larger of two numbers.
+
+        Parameters:
+        x (int or float): The first number.
+        y (int or float): The second number.
+
+        Returns:
+        int or float: The larger of x and y.
+
+        Raises:
+        TypeError: If the parameters are not numbers.
+        """
+
+    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
+        if x <= y:
+            return y
+        return x
+    raise TypeError("the parameters are not numbers")
 
 # Assign(x=y) variables are in dictionary
 def assign(varsDict: dict, x: str, y):
@@ -263,96 +348,11 @@ def And(x, y):
         bool: True if both x and y are True, otherwise False.
         """
 
-    if x and y == 1:
+    if x and y:
         return True
     return False
 
 
-# Power (x^y)
-def pow(x, y):
-    """
-        Raises the first number to the power of the second number.
-
-        Parameters:
-        x (int or float): The base number.
-        y (int or float): The exponent.
-
-        Returns:
-        int or float: The result of x raised to the power of y.
-
-        Raises:
-        TypeError: If the parameters are not numbers.
-        """
-
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        return x ** y
-    raise TypeError("the parameters are not numbers")
-
-
-# Square - add to rules - used as a built in function, not operator
-def sqrt(x):
-    """
-        Returns the square root of a number.
-
-        Parameters:
-        x (int or float): The number to find the square root of.
-
-        Returns:
-        float: The square root of x.
-
-        Raises:
-        TypeError: If the parameter is not a number.
-        """
-
-    if isinstance(x, int) or isinstance(x, float):
-        return x ** 0.5
-    raise TypeError("the parameters are not numbers")
-
-
-# Min (x,y)
-def min(x, y):
-    """
-        Returns the smaller of two numbers.
-
-        Parameters:
-        x (int or float): The first number.
-        y (int or float): The second number.
-
-        Returns:
-        int or float: The smaller of x and y.
-
-        Raises:
-        TypeError: If the parameters are not numbers.
-        """
-
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        if x <= y:
-            return x
-        return y
-    raise TypeError("the parameters are not numbers")
-
-
-# Max (x,y)
-def max(x, y):
-    """
-        Returns the larger of two numbers.
-
-        Parameters:
-        x (int or float): The first number.
-        y (int or float): The second number.
-
-        Returns:
-        int or float: The larger of x and y.
-
-        Raises:
-        TypeError: If the parameters are not numbers.
-        """
-
-    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
-        if x <= y:
-            return y
-        return x
-    raise TypeError("the parameters are not numbers")
 
 
 if __name__ == "__main__":

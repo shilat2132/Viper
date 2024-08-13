@@ -1,3 +1,24 @@
+expression:
+    arithmeticExp:
+        type: arithmeticExp
+        value: the name of the operator, like add, pow
+        children: always 2
+            1. left operand - either expression or a term
+            2. right operand - expression/term
+    
+    logicalExp:
+        type: logicalExp
+        value: the name of the operator, like And, less (<)
+        children: 
+            2 children case
+                1. left operand - logicalExp or a boolean variable/boolean literal
+                2. right operand - logicalExp or a boolean variable/boolean literal
+                in cases of operators like <, ==, ... one of the operand might be a term or an arithmeticExp
+
+            1 child case:
+                the value of the expression would be negate for !
+                1. logicalExp
+
 Term:
 a node with no children with type of: literal, var, function/method call
 

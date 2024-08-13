@@ -98,15 +98,16 @@ class Parser:
         """
         argsNode = AstNode("args")
         mainNode.addChild(argsNode)
-
+        
         # consume the token of args represented by a string in a format of tuple, converts it to a list of args
         args = self.consumeToken()
-        args = argsToList(args.value)
+        if len(args.value)>2:
+            args = argsToList(args.value)
 
-        # for each parameter, tokenize it and adds it as a child node to the args node
-        for arg in args:
-            argNode = self.parseTerm(tokenizeLiteralAndIdentifier(arg, isDef))
-            argsNode.addChild(argNode)
+            # for each parameter, tokenize it and adds it as a child node to the args node
+            for arg in args:
+                argNode = self.parseTerm(tokenizeLiteralAndIdentifier(arg, isDef))
+                argsNode.addChild(argNode)
         
     def parseExp(self, parenthesesAmount=0)->Tuple[AstNode, int] | None:
         """
@@ -377,4 +378,5 @@ class Parser:
             ast.AddNode(node)
             endOfCode = not self.nextLine()
         print(ast)
+        return ast
 

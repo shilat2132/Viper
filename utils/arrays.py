@@ -14,18 +14,17 @@ class Array:
         a (list): The internal list storing the elements of the array.
         """
 
-    def __init__(self, initialVal=None):
+    def __init__(self, *args):
         """
                 Initializes the Array with an optional initial list of values.
 
                 Parameters:
-                initialVal (list, optional): The initial list of elements. Defaults to an empty list.
+                args (list, optional): The initial list of elements. Defaults to an empty list.
                 """
 
-        if initialVal == None:
-            self.a = []
-        else:
-            self.a = initialVal
+        self.a = []
+        for a in args:
+            self.a.append(a)
 
     def __repr__(self):
         """

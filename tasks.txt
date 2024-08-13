@@ -1,1 +1,2 @@
 * check how to initialize a tuple with a list
+* checks how user would all tuple methods
