@@ -4,17 +4,9 @@ Create a parser to process the tokens and generate an abstract syntax tree (AST)
 The parser should follow the grammar rules defined for the language.
 
 
-grammar rules:
-#STATEMENTS
-
-*assign: value of "assign", children: [target: identifier, source: expression/literal/function call]
-DONT FORGET TO ALLOW ASSIGNMENT WITH A FUNCTION CALL 
-
-
 *FUNCTION DEF -still not done
     **function defining: function keyword-type: "functionDef", attr: {function name, args}, children: [body, return statement]
 
-#EXPRESSIONS - Done, deal with extra parenthasis for {}
 
 
 

@@ -40,7 +40,11 @@ class Viper:
 
 # chec; what's wrong
 code = """
-x = min(y)
+function f(a, v, l){
+x=0
+return v
+}
+
 """
 Viper(code).interperter()
 

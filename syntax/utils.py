@@ -60,8 +60,8 @@ def tokenizeLiteralAndIdentifier(literal:str, isDef = False):
     raise SyntaxError(f"Unexpected function argument {literal}")
 
 
-def checkParenthasesValidation(currentLine, parenthasesAmount: int):
+def checkParenthasesValidation(parenthasesAmount: int, parenthasesType = "()" ):
       if parenthasesAmount <0:
-                raise SyntaxError(f"line {currentLine}: extra )")
+                raise SyntaxError(f"extra {parenthasesType[1]}")
       elif parenthasesAmount>0:
-           raise SyntaxError(f"line {currentLine}: extra (")
+           raise SyntaxError(f"extra {parenthasesType[0]}")
