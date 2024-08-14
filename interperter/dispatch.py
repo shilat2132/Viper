@@ -42,12 +42,13 @@ def dispatchBuiltInFunctionsInit(dispatch):
         and keywords functions while/for/if
     """
     for name in dir(arithmetics):
-            attr = getattr(arithmetics, name)
-            dispatch[name] = attr
+        attr = getattr(arithmetics, name)
+        dispatch[name] = attr
   
     for name in dir(keywords):
             attr = getattr(keywords, name)
             if name=="rangeTuple": name = "range"
+            if name == "output": name="print"
             dispatch[name] = attr
     
     for name in dir(strings):

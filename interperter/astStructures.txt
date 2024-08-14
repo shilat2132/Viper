@@ -26,7 +26,7 @@ assign:
     type: assign
     children:
         1. target as a var
-        2. source - can be expression/function call/ DONT FORGET METHOD CALL
+        2. source - can be expression/function call/ DONT FORGET METHOD CALL/term
 
 functionCall:
     type: functionCall
@@ -41,7 +41,8 @@ methodCall:
         1. the object the method is performed at
         2. args: node with children of the args, might be any literal/identifier/expression
 
-return:
+return: allow only from a function definition statement
+
     type: return
     children: one child - can be expression/term
 
@@ -62,6 +63,7 @@ for loop:
     children:
     1. iteration var
     2. iterable, range would have a str tuple args
+        range would have one child of args with children of args
     3. body
 
 function definition:

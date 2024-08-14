@@ -19,11 +19,13 @@ def argsToList(args: str)->list:
 
 def tokenizeLiteralAndIdentifier(literal:str, isDef = False):
     """
-    gets a string and returns its token 
-    for a function call:
-    raise an error if it's not a literal or identifier
-    for a function definition:
-    raise an error if it's not an identifier
+        gets a string and returns its token 
+        
+        for a function call:
+        raise an error if it's not a literal or identifier
+        
+        for a function definition:
+        raise an error if it's not an identifier
     """
     number_pattern = r'^\d+\.\d+|\d+$'  # Matches integers
     string_pattern = r'^".*"$'  # Matches strings enclosed in double quotes

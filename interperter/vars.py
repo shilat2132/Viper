@@ -1,7 +1,7 @@
 class Variable:
     def __init__(self, name, type, value):
         self.name = name
-        self.type = type
+        self.type = type #Number/boolean/string/array/tuple
         self.value = value
 
     def __repr__(self):

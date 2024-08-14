@@ -5,11 +5,11 @@
 # function
 
 # print
-def output(stringToPrint):
-    print(stringToPrint)
+def output(*stringToPrint):
+    print(*stringToPrint)
 
 
-def rangeTuple(end: int, start=0):
+def rangeTuple(end, start=0):
     """
         Generates a range tuple from start to end(end not included).
 
@@ -20,5 +20,8 @@ def rangeTuple(end: int, start=0):
         Returns:
         range: A range object.
         """
+    
+    if isinstance(end, int) and isinstance(start, int):
+       return range(start, end)
+    raise TypeError("range function can only take integers as parameters")
 
-    return range(start, end)

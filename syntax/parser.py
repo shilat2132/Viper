@@ -85,19 +85,22 @@ class Parser:
         mainNode = AstNode("functionCall" if not isMethod else "methodCall", name)
         if isMethod:
             mainNode.addChild(AstNode("var", obj.value))
-        self.parseArgs(mainNode)
+        self.parseArgsOrValues(mainNode)
         return mainNode
 
-    def parseArgs(self, mainNode: AstNode, isDef = False):
+    def parseArgsOrValues(self, mainNode: AstNode, isDef = False, nodeName = "args"):
         """
-        creates a node for each argument and adds it to the args node of the mainNode
-        Params: 
-        mainNode- the main node of the function
-        isDef- are the args of a function/method call or a definition
+        for args: creates a node for each argument and adds it to the args node of the mainNode
+            
+        for values: fits for tuples/arrays literals in which it creates a node of values
+                    
+            Params: 
+                mainNode- the main node of the function
+                isDef- are the args of a function/method call or a definition
 
         """
-        argsNode = AstNode("args")
-        mainNode.addChild(argsNode)
+        argsNode = AstNode(nodeName) #values/args node
+        mainNode.addChild(argsNode) 
         
         # consume the token of args represented by a string in a format of tuple, converts it to a list of args
         args = self.consumeToken()
@@ -108,7 +111,10 @@ class Parser:
             for arg in args:
                 argNode = self.parseTerm(tokenizeLiteralAndIdentifier(arg, isDef))
                 argsNode.addChild(argNode)
-        
+
+    # def parseArrayOrTuple(self, )
+
+
     def parseExp(self, parenthesesAmount=0)->Tuple[AstNode, int] | None:
         """
         creates a subTree recursively for expression: either arithmetical or logical
@@ -183,9 +189,15 @@ class Parser:
         elif currentToken.type == 'string':
             return AstNode('string', currentToken.value)
         elif currentToken.type == 'array':
-            return AstNode('array', currentToken.value)
+            self.currentIndex-=1
+            arrayNode = AstNode('Array', currentToken.value)
+            self.parseArgsOrValues(arrayNode, False, "values")
+            return arrayNode
         elif currentToken.type == 'tuple':
-            return AstNode('tuple', currentToken.value)
+            self.currentIndex-=1
+            tupleNode = AstNode('Tuple', currentToken.value)
+            self.parseArgsOrValues(tupleNode, False, "values")
+            return tupleNode
         else:
             raise SyntaxError(f"Unexpected token: '{currentToken.value}' in line {self.currentLine} col {self.currentIndex-1}")
 
@@ -337,7 +349,10 @@ class Parser:
                 rangeArgs = self.consumeToken()
                 if not rangeArgs or rangeArgs.type != 'tuple':
                     raise SyntaxError("not executing range correctly")
-                forNode.addChild(AstNode(iterable.value, rangeArgs.value ))
+                iterableNode = AstNode("functionCall", "range")
+                self.currentIndex-=1
+                self.parseArgsOrValues(iterableNode)
+                forNode.addChild(iterableNode)
             else: forNode.addChild(AstNode(iterable.type, iterable.value))
 
             curlyBracesAmount = self.parseBlock(forNode, curlyBracesAmount)
@@ -348,7 +363,7 @@ class Parser:
         if parent.value=="function" and nextToken.type == "identifier":
             node = AstNode("functionDef", nextToken.value)
             self.consumeToken() #consumes the function name
-            self.parseArgs(node, True)
+            self.parseArgsOrValues(node, True)
             curlyBracesAmount = self.parseBlock(node, curlyBracesAmount)
             # checkParenthasesValidation(curlyBracesAmount, "{}")
 

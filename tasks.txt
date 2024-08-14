@@ -1,2 +1,4 @@
 * check how to initialize a tuple with a list
-* checks how user would all tuple methods
+* checks how user would use all tuple methods
+* check how to check correct number of arguments sent to a function - maybe build a dictionary for built in functions and create a 
+    function class which have attribute of args number, -1 would mark unlimited

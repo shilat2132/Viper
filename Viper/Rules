@@ -9,6 +9,7 @@ SYNTAX:
 * can't send literals of array/tuple as a function argument - func(x, 5, [2, 4], (g, 4)) -> not allowed
 * boolean literal are true/false, no capital letters
 * nested expression should be wrapped with ()
+* can't call a function inside if another function like: min(3, max(2, 5)), or print(min(3,5))
 
 
 1. func: Definition of a function

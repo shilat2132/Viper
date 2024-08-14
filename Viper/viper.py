@@ -30,16 +30,15 @@ class Viper:
         # for v in tokens:
         #     print(v)
         ast = Parser(tokens).parse()
-        Executor().evaluate(ast.rootNode)
+        vars = Executor().evaluate(ast.rootNode)
+        print(vars)
 
 
            
 
 
-# chec; what's wrong
 code = """
-x= 1
-y= (x==4) || x
+x = [1, "4"]
 """
 Viper(code).interperter()
 

@@ -4,6 +4,7 @@ class AstNode:
         self.type = type
         self.value = value
         self.children = children if children else []
+        
         self.level = parent.level+1 if parent else level
         self.parent = parent
         # for all children set their parent to be current node
