@@ -3,7 +3,7 @@ class Tuple:
         A custom immutable tuple-like class.
 
         Attributes:
-        _values (tuple): The values stored in the CustomTuple.
+        values (tuple): The values stored in the CustomTuple.
         """
 
     def __init__(self, *args):
@@ -14,7 +14,7 @@ class Tuple:
                 *args: The values to be stored in the tuple.
                 """
 
-        self._values = args
+        self.values = args
 
     def __getitem__(self, index):
         """
@@ -26,8 +26,8 @@ class Tuple:
                 Returns:
                 The value at the specified index.
                 """
-
-        return self._values[index]
+        
+        return self.values[index]
 
     def __iter__(self):
         """
@@ -37,7 +37,7 @@ class Tuple:
                 An iterator object.
                 """
 
-        return iter(self._values)
+        return iter(self.values)
 
     def __eq__(self, other):
         """
@@ -52,7 +52,7 @@ class Tuple:
 
         if not isinstance(other, Tuple):
             return False
-        return self._values == other._values
+        return self.values == other.values
 
     def __repr__(self):
         """
@@ -61,26 +61,26 @@ class Tuple:
                 Returns:
                 str: The string representation of the tuple.
                 """
-        return f"CustomTuple{self._values}"
+        return f"CustomTuple{self.values}"
 
-    def __setattr__(self, name, value):
-        """
-               Prevents modification of CustomTuple after initialization.
+    # def __setattr__(self, name, value):
+    #     """
+    #            Prevents modification of CustomTuple after initialization.
 
-               Parameters:
-               name (str): The attribute name.
-               value: The value to set.
+    #            Parameters:
+    #            name (str): The attribute name.
+    #            value: The value to set.
 
-               Raises:
-               AttributeError: If trying to modify attributes other than '_values'.
-               """
+    #            Raises:
+    #            AttributeError: If trying to modify attributes other than 'values'.
+    #            """
 
-        if name == '_values':
-            super().__setattr__(name, value)
-        else:
-            raise AttributeError("Cannot modify CustomTuple")
+    #     if name == 'values':
+    #         super().__setattr__(name, value)
+    #     else:
+    #         raise AttributeError("Cannot modify CustomTuple")
 
-    def __add__(self, other):
+    def add(self, other):
         """
                 Concatenates this CustomTuple with another.
 
@@ -95,7 +95,7 @@ class Tuple:
                 """
 
         if isinstance(other, Tuple):
-            return Tuple(*(self._values + other._values))
+            return Tuple(*(self.values + other.values))
         raise TypeError("Can only concatenate CustomTuple with another CustomTuple")
 
     def index(self, value):
@@ -112,7 +112,7 @@ class Tuple:
                 ValueError: If the value is not found.
                 """
 
-        return self._values.index(value)
+        return self.values.index(value)
 
     def sorted(self):
         """
@@ -122,7 +122,7 @@ class Tuple:
                 Tuple: A new sorted CustomTuple.
                 """
 
-        return Tuple(*sorted(self._values))
+        return Tuple(*sorted(self.values))
     
     def length(self):
         """
@@ -133,22 +133,9 @@ class Tuple:
                 """
 
         count = 0
-        for _ in self._values:
+        for _ in self.values:
             count += 1
         return count
-    # static function
-    def rangeTuple(end, start=0):
-        """
-                Generates a range tuple from start to end.
-
-                Parameters:
-                end (int): The end of the range (exclusive).
-                start (int, optional): The start of the range (inclusive). Defaults to 0.
-
-                Returns:
-                range: A range object.
-                """
-
-        return range(start, end)
+    
 
 

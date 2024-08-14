@@ -1,4 +1,15 @@
+<!-- 1. no remainder % -->
+
 MyCustomLang - Language Definitions:
+
+SYNTAX:
+* in coplex expressions like this: x<=5 && x ==5 && v, you must wrap each part with (), unless it's part made of one operand - for example the v in the above example: (x<=5) && (x ==5) && v
+* can only send identifiers or literals as arguments for a function but not expressions or other
+    functions: fun(x+1) -> not allowed
+* can't send literals of array/tuple as a function argument - func(x, 5, [2, 4], (g, 4)) -> not allowed
+* boolean literal are true/false, no capital letters
+* nested expression should be wrapped with ()
+
 
 1. func: Definition of a function
 
