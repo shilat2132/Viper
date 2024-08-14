@@ -4,7 +4,7 @@ MyCustomLang - Language Definitions:
 
 Arithmetic Functions:
 
-1.  Addition (Add)
+1.  Addition (+)
     Python Function Name: add(x, y)
     Description: Returns the sum of two numbers.
 
