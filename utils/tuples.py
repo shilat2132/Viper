@@ -1,125 +1,98 @@
 class Tuple:
-    """
-        A custom immutable tuple-like class.
-
-        Attributes:
-        values (tuple): The values stored in the CustomTuple.
-        """
-
     def __init__(self, *args):
         """
-                Initializes the CustomTuple with given values.
-
-                Parameters:
-                *args: The values to be stored in the tuple.
-                """
-
-        self.values = args
-
-    def __getitem__(self, index):
+        defines a tuple
+        :param args: values of tuples
         """
-                Retrieves the value at the specified index.
+        self._values = args
 
-                Parameters:
-                index (int): The index of the value to retrieve.
-
-                Returns:
-                The value at the specified index.
-                """
-        
-        return self.values[index]
+    def getitem(self, index):
+        """
+        gets the value at certain index
+        :param index: which index to get
+        :return: the item at certain index
+        """
+        return self._values[index]
 
     def __iter__(self):
         """
-                Returns an iterator for the CustomTuple.
-
-                Returns:
-                An iterator object.
-                """
-
-        return iter(self.values)
-
-    def __eq__(self, other):
+        creates iterator for tuples
+        :return: iterator for tuples
         """
-                Compares this CustomTuple to another for equality.
+        return iter(self._values)
 
-                Parameters:
-                other (Tuple): The other CustomTuple to compare against.
-
-                Returns:
-                bool: True if the tuples are equal, False otherwise.
-                """
-
+    def eq(self, other):
+        """
+        checks if two tuples are equal
+        :param other: other tuple
+        :return: True if all values equal, False otherwise
+        """
         if not isinstance(other, Tuple):
             return False
-        return self.values == other.values
+        return self._values == other._values
 
     def __repr__(self):
         """
-                Returns a string representation of the CustomTuple.
+        converts tuples to string
+        :return: representation of tuple as string
+        """
+        return f"CustomTuple{self._values}"
 
-                Returns:
-                str: The string representation of the tuple.
-                """
-        return str(self.values)
-
+    def setattr(self, name, value):
+        """
+        sets attribute
+        :param name: name of attribute
+        :param value: new value of attribute
+        :return:
+        """
+        if name == '_values':
+            super().__setattr__(name, value)
+        else:
+            raise AttributeError("Cannot modify CustomTuple")
 
     def add(self, other):
         """
-                Concatenates this CustomTuple with another.
-
-                Parameters:
-                other (Tuple): The other CustomTuple to concatenate with.
-
-                Returns:
-                Tuple: A new CustomTuple containing elements from both tuples.
-
-                Raises:
-                TypeError: If the other object is not a CustomTuple.
-                """
-
+        adds two tuples
+        :param other: other tuple
+        :return: new tuple
+        """
         if isinstance(other, Tuple):
-            return Tuple(*(self.values + other.values))
+            return Tuple(*(self._values + other._values))
         raise TypeError("Can only concatenate CustomTuple with another CustomTuple")
 
     def index(self, value):
         """
-                Finds the index of the first occurrence of a value in the CustomTuple.
-
-                Parameters:
-                value: The value to find in the tuple.
-
-                Returns:
-                int: The index of the first occurrence of the value.
-
-                Raises:
-                ValueError: If the value is not found.
-                """
-
-        return self.values.index(value)
+        returns the index of element in tuple
+        :param value: value to find
+        :return: index of value
+        """
+        return self._values.index(value)
 
     def sorted(self):
         """
-                Returns a new CustomTuple with the values sorted.
-
-                Returns:
-                Tuple: A new sorted CustomTuple.
-                """
-
-        return Tuple(*sorted(self.values))
+        sorts tuple
+        :return: new tuple
+        """
+        return Tuple(*sorted(self._values))
     
     def length(self):
         """
-                Returns the number of elements in the CustomTuple.
-
-                Returns:
-                int: The length of the CustomTuple.
-                """
-
+        returns the length of tuple
+        :return:  length of tuple
+        """
         count = 0
-        for _ in self.values:
+        for _ in self._values:
             count += 1
         return count
-    
+
+    # static function
+    def rangeTuple(self, end, start=0):
+        """
+        finds range of tuple
+        :param end: end of tuple
+        :param start: start of tuple
+        :return: range of tuple
+        """
+        return range(start, end)
 
 
