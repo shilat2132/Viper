@@ -352,6 +352,29 @@ def And(x, y):
         return True
     return False
 
+def remainder(x, y):
+    """
+    Returns the remainder of the division of x by y.
+
+    Parameters:
+    x (int or float): The dividend.
+    y (int or float): The divisor.
+
+    Returns:
+    int or float: The remainder of the division of x by y.
+
+    Raises:
+    ArithmeticError: If y is zero.
+    TypeError: If the parameters are not numbers.
+    """
+
+    if y == 0:
+        raise ArithmeticError("cannot divide by zero")
+    if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
+        return x % y
+    raise TypeError("the parameters are not numbers")
+
+
 
 
 

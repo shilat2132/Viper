@@ -1,26 +1,18 @@
-# Array
-# Length
-# Index
-# Array(i)
-# Add(i)
-# Remove(i)
-# Append
-
 class Array:
     """
-        A custom array-like class for managing a list of elements.
+    A custom array-like class for managing a list of elements.
 
-        Attributes:
-        a (list): The internal list storing the elements of the array.
-        """
+    Attributes:
+    a (list): The internal list storing the elements of the array.
+    """
 
     def __init__(self, *args):
         """
-                Initializes the Array with an optional initial list of values.
+        Initializes the Array with an optional initial list of values.
 
-                Parameters:
-                args (list, optional): The initial list of elements. Defaults to an empty list.
-                """
+        Parameters:
+        args (list, optional): The initial list of elements. Defaults to an empty list.
+        """
 
         self.a = []
         for a in args:
@@ -28,30 +20,21 @@ class Array:
 
     def __repr__(self):
         """
-                Returns a string representation of the Array.
+        Returns a string representation of the Array.
 
-                Returns:
-                str: The string representation of the array.
-                """
+        Returns:
+        str: The string representation of the array.
+        """
 
         return str(self.a)
-    def __iter__(self):
-        """
-                Returns an iterator for the array.
 
-                Returns:
-                An iterator object.
-                """
-
-        return iter(self.a)
-    
     def length(self):
         """
-               Returns the number of elements in the Array.
+        Returns the number of elements in the Array.
 
-               Returns:
-               int: The length of the array.
-               """
+        Returns:
+        int: The length of the array.
+        """
 
         count = 0
         for i in self.a:
@@ -60,64 +43,90 @@ class Array:
 
     def index(self, element):
         """
-                Finds the index of the first occurrence of an element in the Array.
+        Finds the index of the first occurrence of an element in the Array.
 
-                Parameters:
-                element: The element to search for.
+        Parameters:
+        element: The element to search for.
 
-                Returns:
-                int: The index of the element, or -1 if not found.
-                """
+        Returns:
+        int: The index of the element, or -1 if not found.
+        """
+
+        if not isinstance(element, (int, float, str)):
+            raise TypeError("element must be an int, float, or str")
 
         i = 0
         while i < self.length():
             if self.a[i] == element:
                 return i
+            i += 1
         return -1
 
     def get(self, i):
         """
-                Retrieves the element at the specified index.
+        Retrieves the element at the specified index.
 
-                Parameters:
-                i (int): The index of the element to retrieve.
+        Parameters:
+        i (int): The index of the element to retrieve.
 
-                Returns:
+        Returns:
+        The element at the specified index.
 
-                Raises:
-                ValueError: If the index is out of range.
+        Raises:
+        ValueError: If the index is out of range.
         """
-        l= self.length()
-        if i>= l or i<0:
+
+        if not isinstance(i, int):
+            raise TypeError("index must be an integer")
+
+        l = self.length()
+        if i >= l or i < 0:
             raise ValueError(f"argument must be in range 0-{l}")
         return self.a[i]
-    
 
     def addItem(self, i, element):
-        a1 = self.a[:i+1]
-        a2 = self.a[i+1:]
+        """
+        Adds an element at the specified index.
+
+        Parameters:
+        i (int): The index at which to add the element.
+        element: The element to add.
+
+        Raises:
+        TypeError: If the index is not an integer.
+        """
+
+        if not isinstance(i, int):
+            raise TypeError("index must be an integer")
+
+        a1 = self.a[:i + 1]
+        a2 = self.a[i + 1:]
         self.a = a1 + [element] + a2
 
     def append(self, element):
         """
-                Appends an element to the end of the Array.
+        Appends an element to the end of the Array.
 
-                Parameters:
-                element: The element to append.
-                """
+        Parameters:
+        element: The element to append.
+        """
 
         self.a = self.a + [element]
 
     def remove(self, i):
         """
-                Removes the element at the specified index.
+        Removes the element at the specified index.
 
-                Parameters:
-                i (int): The index of the element to remove.
+        Parameters:
+        i (int): The index of the element to remove.
 
-                Raises:
-                ValueError: If the index is out of range.
-                """
+        Raises:
+        TypeError: If the index is not an integer.
+        ValueError: If the index is out of range.
+        """
+
+        if not isinstance(i, int):
+            raise TypeError("index must be an integer")
 
         l = self.length()
         if i >= l or i < 0:
