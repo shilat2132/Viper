@@ -39,7 +39,7 @@ class Viper:
 # chec; what's wrong
 code = """
 x= 1
-y= (x==4) || x
+y = x+3
 """
 Viper(code).interperter()
 
