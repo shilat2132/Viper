@@ -7,7 +7,7 @@
     <list default="true" id="c3e2ad06-1b4e-473b-b962-27f23a5e684f" name="Changes" comment="rules" />
     <list default="true" id="c3e2ad06-1b4e-473b-b962-27f23a5e684f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lexer/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/lexer/lexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/strings.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/strings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +64,8 @@
       <workItem from="1723361021527" duration="123000" />
       <workItem from="1723371964672" duration="563000" />
       <workItem from="1723098772146" duration="4013000" />
-      <workItem from="1723475011613" duration="1648000" />
+      <workItem from="1723475011613" duration="1800000" />
+      <workItem from="1723704657824" duration="2865000" />
     </task>
     <task id="LOCAL‎-00001" summary="rules">
       <option name="closed" value="true" />
