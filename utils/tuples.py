@@ -61,24 +61,8 @@ class Tuple:
                 Returns:
                 str: The string representation of the tuple.
                 """
-        return f"CustomTuple{self.values}"
+        return str(self.values)
 
-    # def __setattr__(self, name, value):
-    #     """
-    #            Prevents modification of CustomTuple after initialization.
-
-    #            Parameters:
-    #            name (str): The attribute name.
-    #            value: The value to set.
-
-    #            Raises:
-    #            AttributeError: If trying to modify attributes other than 'values'.
-    #            """
-
-    #     if name == 'values':
-    #         super().__setattr__(name, value)
-    #     else:
-    #         raise AttributeError("Cannot modify CustomTuple")
 
     def add(self, other):
         """

@@ -38,7 +38,11 @@ class Viper:
 
 
 code = """
-x = [1, "4"]
+x = (1, "4")
+for i in range(3){
+c=i
+print(c)
+}
 """
 Viper(code).interperter()
 

@@ -56,11 +56,16 @@ class Executor:
         valuesNode = node.children[0]
 
         # NEED TO CHECK IF IT HAS CHILDREN - the valuesNode
-
+        
         valuesList = [v.value if v.type!="var" else self.vars[v.value].value for v in valuesNode.children ]
+        def removeQuotes(value):
+            if isinstance(value, str):
+                return value[1:-1]
+            return value
+        valuesList = map(removeQuotes, valuesList)
         methodsDict = Executor.arrayMethods if isArray else Executor.tupleMethods
         if not isMethod:
-            value = methodsDict[funcName](valuesList)
+            value = methodsDict[funcName](*valuesList)
 
         # NEEDS TO TAKE CARE OF METHODS THAT AREN'T INITIALIZATION
         return returnType, value
