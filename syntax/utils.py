@@ -45,7 +45,7 @@ def tokenizeLiteralAndIdentifier(literal:str, isDef = False):
         return Token("number", val)
     
     if re.match(string_pattern, literal):
-        return Token("string", literal)
+        return Token("string", literal[1:-1])
     
     if re.match(boolean_pattern, literal):
         return Token("boolean", literal)

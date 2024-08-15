@@ -1,6 +1,25 @@
+import sys
+import os
+original_sys_path = sys.path.copy()
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../utils')))
+from arrays import Array
+from tuples import Tuple
+sys.path = original_sys_path
+
+
 from vars import Vars, Variable
 from functions import FunctionManager
 from dispatch import dispatchBuiltInFunctionsInit, dispatchArrayMethodsInit, dispatchTupleMethodsInit
+
+def returnInstance(value):
+    if isinstance(value, int) or isinstance(value, int):
+        return "Number"
+    if isinstance(value, bool): return "boolean"
+    if isinstance(value, Array): return "array"
+    if isinstance(value, Tuple): return "tuple"
+    if isinstance(value, str): return "string"
+
 
 class Executor:
 
@@ -50,6 +69,12 @@ class Executor:
                 node= the methodCall ASTnode
                 isArray = is that an array's method or a tuple's
                 isMethod = is that a method or initialization 
+            
+            Returns:
+                tuple:
+                    -returnType: type of the method returned element
+                    - value: the result of the method call
+
         """
         returnType, value = "array" if isArray else "tuple", None
         funcName = node.value if isMethod else node.type
@@ -58,11 +83,6 @@ class Executor:
         # NEED TO CHECK IF IT HAS CHILDREN - the valuesNode
         
         valuesList = [v.value if v.type!="var" else self.vars[v.value].value for v in valuesNode.children ]
-        def removeQuotes(value):
-            if isinstance(value, str):
-                return value[1:-1]
-            return value
-        valuesList = map(removeQuotes, valuesList)
         methodsDict = Executor.arrayMethods if isArray else Executor.tupleMethods
         if not isMethod:
             value = methodsDict[funcName](*valuesList)
@@ -88,7 +108,7 @@ class Executor:
         return condition
     
 
-# needs to take care of method call later, also arrays and tuples
+# needs to take care of method call later
     def evaluateTerm(self, node):
         """
         Evaluates a term, which might be a literal, a variable, a function call, or a method call.
@@ -185,16 +205,28 @@ class Executor:
             iterableNode = node.children[1] #the node of the iterable object
             bodyNode = node.children[2] #the for block statements
             currentElementType = None
+
+            # iterable of range
             if iterableNode.value == "range":
                 result = self.evaluateFunctionCall(iterableNode) #execute the range function
                 iterable = result[1] #the tuple returned from range
                 currentElementType = "Number" #each of the range elements is a number
 
-            # ALSO CHECK FOR A TUPLE/ARRAY LITERAL/IDENTIFIER
+            # ALSO CHECK FOR A TUPLE/ARRAY LITERAL
+            if iterableNode.type in ["Array", "Tuple"]:
+                returnType, iterable= self.evaluateMethods(iterableNode, True if iterableNode.type=="Array" else False, False)
+                
+            # iterable of array/tuple variable
+            if iterableNode.type =="identifier":
+                iterable = self.vars[iterableNode.value].value
+                iterType = returnInstance(iterable)
+                if iterType not in ["array", "tuple"]:
+                    raise TypeError(f"can't iterate over a non-iterable object {iterableNode.value}")
             
             self.vars[key]= Variable(key, None, None)
             for i in iterable:
                 self.vars[key].value = i
+                currentElementType = returnInstance(i)
                 self.vars[key].type = currentElementType
                 self.evaluate(bodyNode)
             del self.vars[key] #kill the key variable at the end of the scope

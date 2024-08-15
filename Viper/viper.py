@@ -31,17 +31,16 @@ class Viper:
         #     print(v)
         ast = Parser(tokens).parse()
         vars = Executor().evaluate(ast.rootNode)
-        print(vars)
+        # print(vars)
 
 
            
 
 
 code = """
-x = (1, "4")
-for i in range(3){
-c=i
-print(c)
+function isTrue(val){
+x = val
+return (x, 2)
 }
 """
 Viper(code).interperter()

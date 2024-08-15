@@ -112,8 +112,6 @@ class Parser:
                 argNode = self.parseTerm(tokenizeLiteralAndIdentifier(arg, isDef))
                 argsNode.addChild(argNode)
 
-    # def parseArrayOrTuple(self, )
-
 
     def parseExp(self, parenthesesAmount=0)->Tuple[AstNode, int] | None:
         """
@@ -353,7 +351,15 @@ class Parser:
                 self.currentIndex-=1
                 self.parseArgsOrValues(iterableNode)
                 forNode.addChild(iterableNode)
-            else: forNode.addChild(AstNode(iterable.type, iterable.value))
+
+            
+            elif iterable.type in ["array", "tuple"]:
+                name = "Array" if iterable.type =="array" else "Tuple"
+                objectNode = AstNode(name, iterable.value)
+                self.currentIndex-=1 #to pose back at the tuple/array literal
+                self.parseArgsOrValues(objectNode, False, "values")
+                forNode.addChild(objectNode)
+            else: forNode.addChild(AstNode(iterable.type, iterable.value)) #for identifier
 
             curlyBracesAmount = self.parseBlock(forNode, curlyBracesAmount)
             # checkParenthasesValidation(curlyBracesAmount, "{}")

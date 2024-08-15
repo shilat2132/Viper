@@ -35,7 +35,16 @@ class Array:
                 """
 
         return str(self.a)
+    def __iter__(self):
+        """
+                Returns an iterator for the array.
 
+                Returns:
+                An iterator object.
+                """
+
+        return iter(self.a)
+    
     def length(self):
         """
                Returns the number of elements in the Array.
