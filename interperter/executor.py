@@ -47,7 +47,7 @@ class Executor:
     def evaluateMethods(self, node, isArray=True, isMethod=True):
         """
             Params:
-                node=
+                node= the methodCall ASTnode
                 isArray = is that an array's method or a tuple's
                 isMethod = is that a method or initialization 
         """
@@ -55,7 +55,7 @@ class Executor:
         funcName = node.value if isMethod else node.type
         valuesNode = node.children[0]
 
-        # NEED TO CHECK IF IT HAVE CHILDREN
+        # NEED TO CHECK IF IT HAS CHILDREN - the valuesNode
 
         valuesList = [v.value if v.type!="var" else self.vars[v.value].value for v in valuesNode.children ]
         methodsDict = Executor.arrayMethods if isArray else Executor.tupleMethods
