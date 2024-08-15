@@ -38,10 +38,15 @@ class Viper:
 
 
 code = """
+<<<<<<< HEAD
 function isTrue(val){
 x = val
 return (x, 2)
 }
+=======
+x= 1
+y = x+3
+>>>>>>> yair
 """
 Viper(code).interperter()
 
