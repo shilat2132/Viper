@@ -41,10 +41,7 @@ methodCall:
         1. the object the method is performed at
         2. args: node with children of the args, might be any literal/identifier/expression
 
-return: allow only from a function definition statement
 
-    type: return
-    children: one child - can be expression/term
 
 if:
     type: if

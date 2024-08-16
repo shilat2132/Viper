@@ -28,21 +28,3 @@ class Viper:
         ast = Parser(tokens).parse()
         vars = Executor().evaluate(ast.rootNode)
         print(vars)
-
-
-
-# x = (x+3)^2
-# y = sx
-# isTrue = true
-# if x<=5 && isTrue{
-# print("some str")
-# }
-# x = 5
-# if x<=5 or x!=4:
-#     print(2)
-
-# y = x
-# for i in range(4):
-#     y = y+2
-
-# print(y)

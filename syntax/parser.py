@@ -293,8 +293,8 @@ class Parser:
             node.addChild(source)
             
         
-        # function call - built in like min(x,y) or custom like fun(1, "2")
-        if (parent.type=="identifier" or parent.type=="builtinFunc") and nextToken.type == "tuple":
+        # function call - built in like min(x,y)
+        if  parent.type=="builtinFunc" and nextToken.type == "tuple":
             node = self.parseFunctionCall(parent.value)
             
         
@@ -303,18 +303,6 @@ class Parser:
             methodName = self.consumeToken().value
             node = self.parseFunctionCall(methodName, True, parent)
         
-        # return statement
-        if parent.type == "keyword" and parent.value == "return":
-            returnStatementNode = AstNode("return")
-            if nextToken.value=="null":
-                returnStatementNode.addChild(AstNode("returnValue", "null"))
-                node= returnStatementNode
-            else: 
-                returnValueNode, parenthasesAmount = self.parseExp()
-                checkParenthasesValidation(parenthasesAmount)
-                if returnValueNode != None:
-                    returnStatementNode.addChild(returnValueNode)
-                node = returnStatementNode
 
         # if statement and while loop
         if parent.type == "keyword" and (parent.value == "if" or parent.value == "while"):
