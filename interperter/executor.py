@@ -63,7 +63,7 @@ class Executor:
         return returnType, value
     
     # need to check return type for any possible array/tuple method - maybe put it in a dictionary to make it easier
-    def evaluateMethods(self, node, isArray=True, isMethod=True):
+    def evaluateMethods(self, node, instance="Array", isMethod=True, obj =None):
         """
             Params:
                 node= the methodCall ASTnode
@@ -76,18 +76,21 @@ class Executor:
                     - value: the result of the method call
 
         """
-        returnType, value = "array" if isArray else "tuple", None
+        returnType, value = "array" if instance=="Array" else "tuple", None
         funcName = node.value if isMethod else node.type
-        valuesNode = node.children[0]
+        valuesNode = node.children[0] if not isMethod else node.children[1]
 
         # NEED TO CHECK IF IT HAS CHILDREN - the valuesNode
         
         valuesList = [v.value if v.type!="var" else self.vars[v.value].value for v in valuesNode.children ]
-        methodsDict = Executor.arrayMethods if isArray else Executor.tupleMethods
+        methodsDict = Executor.arrayMethods if instance=="Array" else Executor.tupleMethods
         if not isMethod:
             value = methodsDict[funcName](*valuesList)
 
         # NEEDS TO TAKE CARE OF METHODS THAT AREN'T INITIALIZATION
+        else:
+            obj = self.vars[obj].value
+            methodsDict[funcName](obj, *valuesList)
         return returnType, value
 
 
@@ -126,7 +129,7 @@ class Executor:
             returnType, value= node.type, node.value
         
         if node.type in ["Array", "Tuple"]:
-             returnType, value= self.evaluateMethods(node, True if node.type=="Array" else False, False)
+             returnType, value= self.evaluateMethods(node, "Array" if node.type=="Array" else "Tuple", False)
         # variable - raises an error if variable doesn't exist
         if node.type == "var":
             var = self.vars[node.value]
@@ -214,7 +217,7 @@ class Executor:
 
             # ALSO CHECK FOR A TUPLE/ARRAY LITERAL
             if iterableNode.type in ["Array", "Tuple"]:
-                returnType, iterable= self.evaluateMethods(iterableNode, True if iterableNode.type=="Array" else False, False)
+                returnType, iterable= self.evaluateMethods(iterableNode, "Array" if iterableNode.type=="Array" else "Tuple", False)
                 
             # iterable of array/tuple variable
             if iterableNode.type =="identifier":
@@ -232,17 +235,13 @@ class Executor:
             del self.vars[key] #kill the key variable at the end of the scope
 
 
-
-        # function definition
-
-
-
         # function call - allowed only after being defined, for built in functions they are allowed all the time
         if node.type == "functionCall":
             self.evaluateFunctionCall(node)
 
         # method call
-
+        if node.type =="methodCall":
+            self.evaluateMethods(node, "Array", True, node.children[0].value)
 
 
 

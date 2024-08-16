@@ -9,7 +9,7 @@ class FunctionManager:
         if funcName in self.functions:
             return self.functions[funcName]
         else:
-            raise KeyError(f"Function '{funcName}' not found, Define a function before use")
+            raise KeyError(f"Function '{funcName}' not found")
 
     def __contains__(self, funcName):
         return funcName in self.functions

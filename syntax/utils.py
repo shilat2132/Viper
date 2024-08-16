@@ -27,10 +27,10 @@ def tokenizeLiteralAndIdentifier(literal:str, isDef = False):
         for a function definition:
         raise an error if it's not an identifier
     """
-    number_pattern = r'^\d+\.\d+|\d+$'  # Matches integers
+    number_pattern = r'^[-]?\d+\.\d+|[-]?\d+$'  # Matches integers
     string_pattern = r'^".*"$'  # Matches strings enclosed in double quotes
     boolean_pattern = r'^(true|false)$'  # Matches boolean values
-    identifier_pattern = r'^\w*[a-zA-Z]\w*$'  # Matches identifiers (letters, numbers, underscores)
+    identifier_pattern = r'^[a-zA-Z]\w*$'  # Matches identifiers (letters, numbers, underscores)
     tuple_pattern = r'\((?:\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\"))*)?\)'
     array_pattern = r'\[(?:\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\]'
 

@@ -92,7 +92,17 @@ class Array:
             raise ValueError(f"argument must be in range 0-{l}")
         return self.a[i]
     
-
+    def set(self, i, element):
+        """
+        set the element of the array in index i to be element
+        """
+        if not isinstance(i, int):
+            raise TypeError("this method expects i to be an integer")
+        l= self.length()
+        if i>= l or i<0:
+            raise ValueError(f"argument must be in range 0-{l}")
+        self.a[i] = element
+    
     def addItem(self, i, element):
         a1 = self.a[:i+1]
         a2 = self.a[i+1:]
