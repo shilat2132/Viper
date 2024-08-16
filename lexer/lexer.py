@@ -11,8 +11,18 @@ class Token(object):
 
 
 
-def tokenize(line):
- 
+def tokenize(line)-> list[Token]:
+    """
+    tokenize the line
+
+    Returns:
+        tokens - a list of the tokens from that line, each token is instance of Token
+
+    
+    Example:
+    line = "x=4" the function returns:
+        [Token(type: identifier, value: x), Token(type: assign, value: =), Token(type: number, value: 4)]
+    """
     pattern = r'''
     \s*                                # Optional leading whitespace
     (
@@ -20,7 +30,7 @@ def tokenize(line):
     )
     |
     (
-        (?P<keyword>\b(?:while|for|if|else|function|return|null|in)\b)  # Group 2: Control flow keywords
+        (?P<keyword>\b(?:while|for|if|else|in)\b)  # Group 2: Control flow keywords
     )
     |
     (
@@ -32,13 +42,14 @@ def tokenize(line):
     )
     |
     (
-        (?P<number>[-]?\d+\.\d+|[-]?\d+)  # Group 5: Numeric literals (numbers, including floats)
+        (?P<operator>[+*/%^-])  # Group 6: Arithmetic operators
     )
     |
     (
-        (?P<operator>[+*/^-])  # Group 6: Arithmetic operators
+        (?P<number>[-]?\d+\.\d+|[-]?\d+)  # Group 5: Numeric literals (numbers, including floats)
     )
     |
+    
     (
         (?P<builtinFunc>\b(?:range|print|max|min|sqrt)\b)  # Group 7: Built-in functions
     )
@@ -138,11 +149,28 @@ def tokenize(line):
    
         elif match.group('error'):  # Unexpected symbols
             raise SyntaxError(f"Unexpected token: {match.group('error')}")
-
-    
+   
     return tokens
 
+
+
 def lexer(code: str, tokens: list):
+    """
+    tokenize the code string and stores it in the tokens list
+
+    in the end the tokens would be a list in which each element is a list of tokens of a line
+
+    functions/method call would be tokenized as a tuple
+    
+    example: 
+        for the following code:
+            a = [3, 5]
+            print(x)
+
+        tokens list would be:
+            [Token(type: identifier, value: a), Token(type: assign, value: =), Token(type: array, value: [3, 5])]
+            [Token(type: builtinFunc, value: print), Token(type: tuple, value: (x))]
+    """
     # split to lines
     lines = code.split("\n")
     # for each line classify to tokens with regex
@@ -151,5 +179,4 @@ def lexer(code: str, tokens: list):
             lineTokens = tokenize(line)
             tokens.append(lineTokens)
     
-    return tokens
     

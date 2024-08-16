@@ -1,0 +1,13 @@
+* there is no null/None, return in the languege
+* user can't define his own function but he can use builtin function
+
+keywords: while|for|if|else|in(would fit only for a for loop)
+operators: logical: ==, !=, &&, ||, !,>=, <=, <,>
+           arithmetic:=, +, *, /, %, -, ^
+identifiers: variablesNames
+literal: Number - either positive/negative, int or float
+         string - surronded with ""
+         boolean - true/false
+
+built in functions: range|print|max|min|sqrt
+Parenthesis = () for function call, {} for a block, [] for array, () for tuples

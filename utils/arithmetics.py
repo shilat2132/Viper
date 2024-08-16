@@ -374,26 +374,3 @@ def remainder(x, y):
         return x % y
     raise TypeError("the parameters are not numbers")
 
-
-
-
-
-if __name__ == "__main__":
-    print(add(1, 2))
-    print(sub(1, 2))
-    print(mul(5, 2))
-    print(div(5, 2))
-    x = 5
-    y = 2
-    assign(x, y)
-    print(x, y)
-    print(equal(5, 2))
-    print(not_equal(5, 2))
-    print(greater(5, 2))
-    print(less(5, 2))
-    print(Or(5 % 2, 2 % 2))
-    print(pow(5, 2))
-    print(sqrt(4))
-    print(min(5, 2))
-    print(max(5, 2))
-    print(And(5 % 2, 2 % 2))

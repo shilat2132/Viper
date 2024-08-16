@@ -31,8 +31,8 @@ def tokenizeLiteralAndIdentifier(literal:str, isDef = False):
     string_pattern = r'^".*"$'  # Matches strings enclosed in double quotes
     boolean_pattern = r'^(true|false)$'  # Matches boolean values
     identifier_pattern = r'^[a-zA-Z]\w*$'  # Matches identifiers (letters, numbers, underscores)
-    tuple_pattern = r'\((?:\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\"))*)?\)'
-    array_pattern = r'\[(?:\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\]'
+    tuple_pattern = r'\((?:\s*(?:[a-zA-Z_]\w*|[-]?\d+\.\d+|[-]?\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|[-]?\d+\.\d+|[-]?\d+|\'[^\']*\'|\"[^\"]*\"))*)?\)'
+    array_pattern = r'\[(?:\s*(?:[a-zA-Z_]\w*|[-]?\d+\.\d+|[-]?\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|[-]?\d+\.\d+|[-]?\d+|\'[^\']*\'|\"[^\"]*\"))*)?\]'
 
     if isDef:
         if re.match(identifier_pattern, literal):

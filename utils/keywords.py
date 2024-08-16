@@ -16,6 +16,8 @@ def rangeTuple(end, start=0):
         """
     
     if isinstance(end, int) and isinstance(start, int):
+       if end<=start:
+           raise ValueError("starting index of range function should be smaller than ending index")
        return range(start, end)
     raise TypeError("range function can only take integers as parameters")
 

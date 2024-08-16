@@ -1,4 +1,0 @@
-Testing:
-
-Write test cases to validate the correctness of the lexer, parser, and interpreter. 
-Provide sample programs written in the custom language to demonstrate its features.

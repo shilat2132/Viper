@@ -19,7 +19,8 @@ class Parser:
         "-": "sub",
         "*": "mul",
         "/": "div",
-        "^": "pow"
+        "^": "pow",
+        "%": "remainder"
     }
     def __init__(self, tokensMatrix):
         self.tokensMatrix = tokensMatrix
@@ -169,7 +170,7 @@ class Parser:
                 if nextToken.type == "tuple":
                     return self.parseFunctionCall(currentToken.value)
            
-
+        # checks if it's a method call
         if currentToken.type =="identifier":
             nextToken = self.consumeToken()
             
@@ -179,9 +180,10 @@ class Parser:
                     methodName = self.consumeToken().value
                     return self.parseFunctionCall(methodName, True, currentToken)
         
+        # checks if it's a variable
         if currentToken.type == 'identifier':
                 return AstNode('var', currentToken.value)
-        
+        # checks if it's literals
         elif currentToken.type == 'number':
             return AstNode('Number', currentToken.value)
         elif currentToken.type == 'boolean':

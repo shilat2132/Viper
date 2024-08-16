@@ -1,10 +1,4 @@
 class Array:
-    """
-    A custom array-like class for managing a list of elements.
-
-    Attributes:
-    a (list): The internal list storing the elements of the array.
-    """
 
     def __init__(self, *args):
         """
@@ -81,7 +75,7 @@ class Array:
 
         l = self.length()
         if i >= l or i < 0:
-            raise ValueError(f"argument must be in range 0-{l}")
+            raise IndexError(f"index must be in range 0-{l-1}")
         return self.a[i]
     
     def set(self, i, element):
@@ -92,7 +86,7 @@ class Array:
             raise TypeError("this method expects i to be an integer")
         l= self.length()
         if i>= l or i<0:
-            raise ValueError(f"argument must be in range 0-{l}")
+            raise IndexError(f"index must be in range 0-{l-1}")
         self.a[i] = element
     
     def addItem(self, i, element):
@@ -141,5 +135,5 @@ class Array:
 
         l = self.length()
         if i >= l or i < 0:
-            raise ValueError(f"argument must be in range 0-{l}")
+            raise IndexError(f"index must be in range 0-{l-1}")
         self.a = self.a[:i] + self.a[i + 1:]

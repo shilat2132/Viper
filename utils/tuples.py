@@ -4,9 +4,8 @@ class Tuple:
         """
         Initializes the CustomTuple with given values.
 
-    def getItem(self, index):
-        Parameters:
-        *args: The values to be stored in the tuple.
+        Params:
+            *args: The values to be stored in the tuple.
         """
 
         self.values = args
@@ -24,6 +23,8 @@ class Tuple:
         
         if not isinstance(index, int):
             raise TypeError("index must be an integer")
+        if index<0 or index>= self.length():
+            raise IndexError("index out of bound")
         return self.values[index]
 
     def __iter__(self):
@@ -64,7 +65,7 @@ class Tuple:
         :return: index of value or -1 if not found
         """
         try:
-            return self._values.index(value)
+            return self.values.index(value)
         except:
             return -1
 

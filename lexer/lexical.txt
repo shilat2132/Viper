@@ -14,20 +14,6 @@ This involves breaking down the code into meaningful tokens such as:
           -Boolean Literals: True, False
 
 
-TODO:
-- learn regular expressions
-- build regular expression for each token format
-- build a class token. fields: 
-     type: type of token (keyword, operator,...)
-     value: the given word in the code
-     position: placement in the source code
-
-     Example: Token(type='NUMBER', value=42, position=(1, 5)) # literal of a number 42 in line 1, word 5
-               Token(type='IDENTIFIER', value='x', position=(1, 8))
-
-- lexer accept whole source code as a string, tokenize it and saves all tokens in a literals
-- assuming the whole proccess is in one class, it would have a field of tokens
-
 
 keywords: while|for|if|else|print, function call, function definition
 operators: logical: ==, !=, &&, || !

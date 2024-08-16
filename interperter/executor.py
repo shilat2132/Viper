@@ -10,9 +10,11 @@ sys.path = original_sys_path
 
 from vars import Vars, Variable
 from functions import FunctionManager
-from dispatch import dispatchBuiltInFunctionsInit, dispatchArrayMethodsInit, dispatchTupleMethodsInit
-
+from dispatch import *
 def returnInstance(value):
+    """
+    returns the type of the value
+    """
     if isinstance(value, int) or isinstance(value, int):
         return "Number"
     if isinstance(value, bool): return "boolean"
@@ -23,52 +25,65 @@ def returnInstance(value):
 
 class Executor:
 
-    builtInFunctions, arrayMethods, tupleMethods = FunctionManager(), FunctionManager(), FunctionManager()
+    builtInFunctions, arrayMethods, tupleMethods, stringMethods = FunctionManager(), FunctionManager(), FunctionManager(), FunctionManager()
     dispatchBuiltInFunctionsInit(builtInFunctions)
     dispatchArrayMethodsInit(arrayMethods)
     dispatchTupleMethodsInit(tupleMethods)
-
+    dispatchStringMethodsInit(stringMethods)
+    arraysMethodsDetails = arrayMethodsDetails()
+    tuplesMethodsDetails = tuplesMethodsDetails()
+    stringsDetailsMethods = stringsDetailsMethods()
    
     def __init__(self):
         self.vars = Vars()
-        self.userFunctions = FunctionManager()
 
     def evaluateFunctionCall(self, node):
         """
                 evaluates and executes the function call,
-                if the function isn't built in and not defined by user - it raises an error
+                if the function doesn't exist - it raises an error
                 Returns:
                     tuple:
                         - type of the returned value
                         - return value
         """
-        returnType, value = None, None
         funcName = node.value
         argsNode = node.children[0]
-        argsList = [a.value if a.type!="var" else self.vars[a.value].value for a in argsNode.children ]
-        if funcName in ["sqrt", "min", "max"]:
-            returnType = "Number"
-            value = Executor.builtInFunctions[funcName](*argsList)
-        elif funcName in ["range", "print"]:
-            if funcName == "range":
-                returnType = "tuple"
-                argsList.reverse() #custom range gets parameters as end, start so reverse the order
-                if len(argsList)>2 or len(argsList)<1 :
-                    raise TypeError ("range() takes 1 up to 2 positional arguments")
-            value = Executor.builtInFunctions[funcName](*argsList)
-    
+        argsList = [a.value if a.type!="var" else self.vars[a.value].value for a in argsNode.children]
+
+        # key = function name, value= a tuple 
+            # where the first element is the number of arguments the function takes (-1 refers to unlimited numner of args)
+            # second element is the type of the element the function returns
+        functionDetailsDict = {"sqrt": (1, "Number"),
+                         "min": (2, "Number"),
+                         "max": (2, "Number"),
+                         "range": "tuple",
+                         "print": (-1, "None")
+                         }
+        
+        if funcName =="range":
+            argsList.reverse() #custom range gets parameters in the order of (end, start) so reverse the order
+            if len(argsList)>2 or len(argsList)<1 :
+                raise TypeError (f"range() takes 1 up to 2 positional arguments but {len(argsList)} were given")
+            returnType = functionDetailsDict[funcName]
+
         else:
-            # after evaluating a func definition, take care of its return type and valus
-            self.userFunctions[funcName](*argsList) #raises an error if function doesn't exist
+            returnType = functionDetailsDict[funcName][1]
+            if funcName!="print":
+                numOfArgs = functionDetailsDict[funcName][0]
+                if len(argsList)!=numOfArgs :
+                    raise TypeError(f"{funcName}() takes {numOfArgs} positional elements but {len(argsList)} were given")
+
+        value = Executor.builtInFunctions[funcName](*argsList)
+    
         return returnType, value
     
-    # need to check return type for any possible array/tuple method - maybe put it in a dictionary to make it easier
-    def evaluateMethods(self, node, instance="Array", isMethod=True, obj =None):
+    # need to check return type for any possible array/tuple/string method - maybe put it in a dictionary to make it easier
+    def evaluateMethods(self, node, isMethod=True, obj =None):
         """
             Params:
                 node= the methodCall ASTnode
-                isArray = is that an array's method or a tuple's
-                isMethod = is that a method or initialization 
+                isMethod = is that a method or initialization
+                obj = the object the method should be called on(the name of the object)
             
             Returns:
                 tuple:
@@ -76,21 +91,50 @@ class Executor:
                     - value: the result of the method call
 
         """
-        returnType, value = "array" if instance=="Array" else "tuple", None
-        funcName = node.value if isMethod else node.type
-        valuesNode = node.children[0] if not isMethod else node.children[1]
-
-        # NEED TO CHECK IF IT HAS CHILDREN - the valuesNode
+        typeDict ={"array":(Executor.arrayMethods, Executor.arraysMethodsDetails), 
+                   "tuple": (Executor.tupleMethods, Executor.tuplesMethodsDetails), 
+                   "string": (Executor.stringMethods, Executor.stringsDetailsMethods)}
         
-        valuesList = [v.value if v.type!="var" else self.vars[v.value].value for v in valuesNode.children ]
-        methodsDict = Executor.arrayMethods if instance=="Array" else Executor.tupleMethods
-        if not isMethod:
-            value = methodsDict[funcName](*valuesList)
+        # gets the method name and the arguments
+        methodName = node.value if isMethod else node.type
+        valuesNode = node.children[0] if not isMethod else node.children[1]
+        valuesList = [v.value if v.type!="var" else self.vars[v.value].value for v in valuesNode.children]
+        
+       
+       
+        # INITIALIZATION OF ARRAY/TUPLE
+        if not isMethod: 
+            if methodName=="Array":
+                returnType = "array"
+                methodsDict = Executor.arrayMethods
+            else: 
+                returnType = "tuple"
+                methodsDict = Executor.tupleMethods
+            value = methodsDict[methodName](*valuesList)
 
-        # NEEDS TO TAKE CARE OF METHODS THAT AREN'T INITIALIZATION
+        # METHODS THAT AREN'T INITIALIZATION
         else:
-            obj = self.vars[obj].value
-            methodsDict[funcName](obj, *valuesList)
+            obj = self.vars[obj]
+            instance = obj.type
+
+            if instance not in ["array", "tuple", "string"]:
+                raise TypeError(f"can't perform a method on object with type of {instance}")
+            # checks for validation of number of arguments
+            methodDetailsDict = typeDict[instance][1] 
+            if methodName not in methodDetailsDict:
+                raise TypeError(f"{instance} doesn't have {methodName} method")
+            numOfArgs =  methodDetailsDict[methodName][0]
+            if len(valuesList) !=numOfArgs:
+                raise TypeError(f"{methodName}() takes {numOfArgs} positional elements but {len(valuesList)} were given")
+           
+            # execute the method
+            methodsDict = typeDict[instance][0]
+            value = methodsDict[methodName](obj.value, *valuesList)
+
+            # checks the return type
+            returnType = methodDetailsDict[methodName][1]
+            if returnType=="any":
+                returnType = returnInstance(value)
         return returnType, value
 
 
@@ -107,7 +151,7 @@ class Executor:
         condType, condition, isVar = self.evaluateExp(node.children[0])
         # condition can be either a logical expression (resulting in boolean value) or a variable
         if condType != "boolean" and not isVar:
-            raise TypeError("if should be followed only by a logical expression")
+            raise TypeError("if should be followed only by a logical expression or a single variable")
         return condition
     
 
@@ -129,24 +173,30 @@ class Executor:
             returnType, value= node.type, node.value
         
         if node.type in ["Array", "Tuple"]:
-             returnType, value= self.evaluateMethods(node, "Array" if node.type=="Array" else "Tuple", False)
-        # variable - raises an error if variable doesn't exist
+            #  calls evaluate method to initialize new array/tuple
+             returnType, value= self.evaluateMethods(node, False)
+        
+        # variable
         if node.type == "var":
-            var = self.vars[node.value]
+            var = self.vars[node.value] #would raise an error if the variable doesn't exist
             isVar = True
             returnType, value = var.type, var.value
         
         # function call - either built in or a user defined
         if node.type == "functionCall":
             returnType, value = self.evaluateFunctionCall(node)
+
+        # MISSING A METHOD CALL AS A TERM EVALUATION
+        if node.type == "methodCall":
+            returnType, value = self.evaluateMethods(node,True, node.children[0].value)
         return returnType, value, isVar
     
-        # MISSING A METHOD CALL AS A TERM EVALUATION
     
 
     def evaluateExp(self, node):
         """
-            Evaluate an expression, either arithmetic or logic.
+            Evaluate an expression, either arithmetic or logic, 
+            if the node isn't an expression it would call evaluateTerm method
 
             Returns:
                tuple:
@@ -154,18 +204,19 @@ class Executor:
                 - value (Any): The value of the evaluated expression.
                 - isVar (bool): the returned element is var or not
         """
-        isVar = False
+        isVar = False #used for logical expression in which one variable would also be considered as a logical expression - true if it's not None
         # arithmetic or logical
         if node.type == "arithmeticExp" or node.type =="logicalExp":
             operation = node.value
             returnType = "Number" if node.type == "arithmeticExp" else "boolean"
             op1 = self.evaluateExp(node.children[0])
             op2 = self.evaluateExp(node.children[1])
+            # op1 and op2 are both tuples whose second element is the value of the operand
             result = Executor.builtInFunctions[operation](op1[1], op2[1]) #the value
             value = result
         
 
-        # term
+        # if the node is not an expression then it's a term
         else:
             returnType, value, isVar = self.evaluateTerm(node)
 
@@ -235,13 +286,13 @@ class Executor:
             del self.vars[key] #kill the key variable at the end of the scope
 
 
-        # function call - allowed only after being defined, for built in functions they are allowed all the time
+        # function call
         if node.type == "functionCall":
             self.evaluateFunctionCall(node)
 
         # method call
         if node.type =="methodCall":
-            self.evaluateMethods(node, "Array", True, node.children[0].value)
+            self.evaluateMethods(node, True, node.children[0].value)
 
 
 
@@ -254,7 +305,3 @@ class Executor:
             self.evaluateStatement(child)
         return self.vars
 
-# a = Executor.arrayMethods["Array"](1, 2)
-# a.append(3)
-# print(a)
-# print(Executor.arrayMethods)

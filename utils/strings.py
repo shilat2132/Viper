@@ -1,6 +1,6 @@
-def REPLACE(container: str, find: str, replace: str) -> str:
+def REPLACE(container, find, replace) -> str:
     """
-    Replaces all occurrences of a substring within a string with another substring.
+    Replaces all occurrences of a 'find' within the 'container' with 'replace'.
 
     Parameters:
     container (str): The original string where the replacement will occur.
@@ -10,7 +10,9 @@ def REPLACE(container: str, find: str, replace: str) -> str:
     Returns:
     str: The modified string with all occurrences of 'find' replaced by 'replace'.
     """
-
+    if not isinstance(container, str) or not isinstance(find, str) or not isinstance(replace, str):
+        raise TypeError("arguments must be strings")
+    
     containerSize = len(container)
     findSize = len(find)
     replaceSize = len(replace)
@@ -30,7 +32,7 @@ def REPLACE(container: str, find: str, replace: str) -> str:
     return container
 
 
-def isUpper(text: str) -> bool:
+def isUpper(text) -> bool:
     """
     Checks if all characters in a string are uppercase.
 
@@ -42,7 +44,7 @@ def isUpper(text: str) -> bool:
     """
     
     if not isinstance(text, str):
-        return False
+        raise TypeError("argument must be a string")
 
     for c in text:
         if ord(c) < 65 or ord(c) > 90:
@@ -50,7 +52,7 @@ def isUpper(text: str) -> bool:
     return True
 
 
-def isLower(text: str) -> bool:
+def isLower(text) -> bool:
     """
     Checks if all characters in a string are lowercase.
 
@@ -62,7 +64,7 @@ def isLower(text: str) -> bool:
     """
     
     if not isinstance(text, str):
-        return False
+        raise TypeError("argument must be a string")
 
     for c in text:
         if ord(c) < 32 + 65 or ord(c) > 32 + 90:
@@ -70,7 +72,7 @@ def isLower(text: str) -> bool:
     return True
 
 
-def CONCAT(first: str, last: str) -> str:
+def CONCAT(first, last) -> str:
     """
     Concatenates two strings into one.
 
@@ -82,4 +84,6 @@ def CONCAT(first: str, last: str) -> str:
     str: The concatenated string.
     """
 
+    if not isinstance(first, str) or not isinstance(last, str):
+        raise TypeError("argument must be a string")
     return first + last
