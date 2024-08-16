@@ -236,7 +236,7 @@ class Executor:
 
         # if statement
         if node.type == "if":
-           
+            condition = self.evaluateCondition(node)
             if condition:
                 self.evaluate(node.children[1])
             else:

@@ -25,24 +25,11 @@ class Viper:
     def interperter(self):
         tokens = []
         lexer(self.stringCode, tokens) # type: ignore
-        # print(Viper.tokens[4])
-        # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
-        # for v in tokens:
-        #     print(v)
-
         ast = Parser(tokens).parse()
-        # vars = Executor().evaluate(ast.rootNode)
-        # print(vars)
+        vars = Executor().evaluate(ast.rootNode)
+        print(vars)
 
 
-           
-
-
-code = """
-min(1, 7)
-
-"""
-Viper(code).interperter()
 
 # x = (x+3)^2
 # y = sx
