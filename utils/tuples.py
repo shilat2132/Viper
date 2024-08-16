@@ -1,34 +1,47 @@
 class Tuple:
+
     def __init__(self, *args):
         """
-        defines a tuple
-        :param args: values of tuples
+        Initializes the CustomTuple with given values.
+
+    def getItem(self, index):
+        Parameters:
+        *args: The values to be stored in the tuple.
         """
-        self._values = args
+
+        self.values = args
 
     def getItem(self, index):
         """
-        gets the value at certain index
-        :param index: which index to get
-        :return: the item at certain index
+        Retrieves the value at the specified index.
+
+        Parameters:
+        index (int): The index of the value to retrieve.
+
+        Returns:
+        The value at the specified index.
         """
-        return self._values[index]
+        
+        if not isinstance(index, int):
+            raise TypeError("index must be an integer")
+        return self.values[index]
 
     def __iter__(self):
         """
-        creates iterator for tuples
-        :return: iterator for tuples
+        Returns an iterator for the CustomTuple.
         """
-        return iter(self._values)
+        return iter(self.values)
+
 
 
     def __repr__(self):
         """
-        converts tuples to string
-        :return: representation of tuple as string
-        """
-        return str(self._values)
+        Returns a string representation of the CustomTuple.
 
+        Returns:
+        str: The string representation of the tuple.
+        """
+        return str(self.values)
 
     def combine(self, other):
         """
@@ -41,7 +54,7 @@ class Tuple:
                 new tuple with the 2 tuples combined
         """
         if isinstance(other, Tuple):
-            return Tuple(*(self._values + other._values))
+            return Tuple(*(self.values + other.values))
         raise TypeError("Can only concatenate CustomTuple with another Tuple")
 
     def index(self, value):
@@ -57,18 +70,24 @@ class Tuple:
 
     def sorted(self):
         """
-        sorts tuple
-        :return: new tuple
+        Returns a new CustomTuple with the values sorted.
+
+        Returns:
+        Tuple: A new sorted CustomTuple.
         """
-        return Tuple(*sorted(self._values))
+
+        return Tuple(*sorted(self.values))
     
     def length(self):
         """
-        returns the length of tuple
-        :return:  length of tuple
+        Returns the number of elements in the CustomTuple.
+
+        Returns:
+        int: The length of the CustomTuple.
         """
+
         count = 0
-        for _ in self._values:
+        for _ in self.values:
             count += 1
         return count
 
