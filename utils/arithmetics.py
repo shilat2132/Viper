@@ -173,18 +173,6 @@ def max(x, y):
         return x
     raise TypeError("the parameters are not numbers")
 
-# Assign(x=y) variables are in dictionary
-def assign(varsDict: dict, x: str, y):
-    """
-        Assigns the value of y to the variable x in the provided dictionary.
-
-        Parameters:
-        varsDict (dict): The dictionary storing variables.
-        x (str): The variable name.
-        y (any): The value to assign to the variable.
-        """
-
-    varsDict[x] = y
 
 # Equal (x==y)
 def equal(x, y):

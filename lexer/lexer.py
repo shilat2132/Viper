@@ -83,7 +83,7 @@ def tokenize(line)-> list[Token]:
     )
      |
     (
-        (?P<identifier>\w*[a-zA-Z]\w*)  # Group 18: Identifiers
+        (?P<identifier>[a-zA-Z]\w*)  # Group 18: Identifiers
     )
     |
     

@@ -63,6 +63,11 @@ def tokenizeLiteralAndIdentifier(literal:str, isDef = False):
 
 
 def checkParenthasesValidation(parenthasesAmount: int, parenthasesType = "()" ):
+      """
+      checks if every '(' has its matching ')', same for {}
+
+      raises an error if one of them is missing
+      """
       if parenthasesAmount <0:
                 raise SyntaxError(f"extra {parenthasesType[1]}")
       elif parenthasesAmount>0:

@@ -27,10 +27,10 @@ class Viper:
         lexer(self.stringCode, tokens) # type: ignore
         # print(Viper.tokens[4])
         # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
-        for v in tokens:
-            print(v)
+        # for v in tokens:
+        #     print(v)
 
-        # ast = Parser(tokens).parse()
+        ast = Parser(tokens).parse()
         # vars = Executor().evaluate(ast.rootNode)
         # print(vars)
 
@@ -39,7 +39,7 @@ class Viper:
 
 
 code = """
-x = 3%1
+min(1, 7)
 
 """
 Viper(code).interperter()

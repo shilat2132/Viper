@@ -17,6 +17,9 @@ class AstNode:
         self.parent = node
 
     def setLevel(self, newLevel: int):
+        """
+        the level of the node in the tree - helps with printing the tree in the structure of tree
+        """
         self.level = newLevel
 
     def update_descendant_levels(node):
@@ -26,17 +29,20 @@ class AstNode:
             AstNode.update_descendant_levels(child)
 
     def addChild(self, node):
+        """
+        adds 'node' as a child to the current node and update its level and its descendant's
+        """
         node.setParent(self)
         node.setLevel(self.level+1)
         self.children.append(node)
         AstNode.update_descendant_levels(node)
     
-    def isLeaf(self)-> bool:
-        return len(self.children)==0
-    
 
     
     def __repr__(self) -> str:
+        """
+        prints the node in a structure of a tree
+        """
         return self._repr_helper(self.level, '', False)
 
     def _repr_helper(self, level: int, prefix: str, is_last: bool) -> str:
@@ -58,15 +64,16 @@ class AstNode:
 
 class Ast:
     def __init__(self) :
+        """
+        initialize the ast with a node of root representing the main program
+        """
         self.rootNode = AstNode("root")
-    
-    def createNode(self, type, value=None, children=None, parent=None):
-        if not parent:
-            parent = self.rootNode
-        node = AstNode(type, value, children, parent)
-        node.parent.addChild(node)
 
     def AddNode(self, node: AstNode):
+        """
+        if 'node' doesn't have a parent, set its parent to be the root.
+        adds the node as a child to its parent's node
+        """
         if not node.parent:
             node.parent = self.rootNode
         node.parent.addChild(node)

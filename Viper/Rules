@@ -1,39 +1,7 @@
 
-MyCustomLang - Language Definitions:
-
-SYNTAX:
-* in coplex expressions like this: x<=5 && x ==5 && v, you must wrap each part with (), unless it's part made of one operand - for example the v in the above example: (x<=5) && (x ==5) && v
-* can only send identifiers or literals as arguments for a function but not expressions or other
-    functions: fun(x+1) -> not allowed
-* can't send literals of array/tuple as a function argument - func(x, 5, [2, 4], (g, 4)) -> not allowed
-* boolean literal are true/false, no capital letters
-* nested expression should be wrapped with ()
-* can't call a function inside of another function like: min(3, max(2, 5)), or print(min(3,5))
 
 
-1. func: Definition of a function
 
-Arithmetic Functions:
-
-1.  Addition (+)
-    Python Function Name: add(x, y)
-    Description: Returns the sum of two numbers.
-
-2.  Subtraction (Subtract)
-    Python Function Name: sub(x, y)
-    Description: Returns the difference between two numbers.
-
-3.  Multiplication (Multiply)
-    Python Function Name: mul(x, y)
-    Description: Returns the product of two numbers.
-
-4.  Division (Divide)
-    Python Function Name: div(x, y)
-    Description: Returns the quotient of two numbers. Raises an error if y is 0.
-
-5.  Exponentiation (Power)
-    Python Function Name: pow(x, y)
-    Description: Returns x raised to the power of y.
 
 6.  Square Root (Square Root)
     Python Function Name: sqrt(x)

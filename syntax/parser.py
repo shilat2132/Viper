@@ -23,6 +23,11 @@ class Parser:
         "%": "remainder"
     }
     def __init__(self, tokensMatrix):
+        """
+            sets the list of lists of tokens that represents the user's code
+
+            initialize current position in the matrix of tokens
+        """
         self.tokensMatrix = tokensMatrix
         self.currentLine = 0
         self.currentIndex =0
@@ -31,10 +36,12 @@ class Parser:
     def nextLine(self):
         """
         forwards position to first token of next line if exists, in the token matrix list
+        
         Parameters:
-        None
+            None
+        
         Returns:
-        bool: return True if forwarding was successful, and False if we reaches the end of the list
+            bool: return True if forwarding was successful, and False if we reaches the end of the list
         """
         if self.currentLine +1 < len(self.tokensMatrix):
             self.currentLine+=1
@@ -46,10 +53,9 @@ class Parser:
     def consumeToken(self):
         """
            returns the current token in line and forwarding position
-            Parameters:
-            None
+            
             Returns:
-            returns the current token or None if reached the end of line
+                returns the current token or None if reached the end of line
         """
         try:
             t = self.tokensMatrix[self.currentLine][self.currentIndex]
@@ -62,8 +68,9 @@ class Parser:
         """
         returns the current token without forwarding the position in the tokens matrix, 
         would go to next line if current line is over
-        Returns:
-        if reached end of code returns -1
+       
+         Returns:
+            returns the current token, if reached end of code returns -1
         """
         # checks if the next token is within the same line
         if self.currentIndex < len(self.tokensMatrix[self.currentLine]):
@@ -76,12 +83,14 @@ class Parser:
         """
         creating a node of a functionCall/methodCall with the name as value and its 
         args as node with children. if it's a method, add a node for the object
+        
         Params:
-        name - the name of the function/method being called
-        isMethod - is that a method call or a function call
-        obj - if it's a method, that would be the object the method is performed on
+            name - the name of the function/method being called
+            isMethod - is that a method call or a function call
+            obj - if it's a method, that would be the object the method is performed on
+        
         Returns:
-        the functionCall node
+            the functionCall node
         """
         mainNode = AstNode("functionCall" if not isMethod else "methodCall", name)
         if isMethod:
@@ -119,9 +128,10 @@ class Parser:
     def parseExp(self, parenthesesAmount=0)->Tuple[AstNode, int] | None:
         """
         creates a subTree recursively for expression: either arithmetical or logical
-        Returns: 
-        the subtree and the number of parenthases after incrementing if met with ( and decrementing if met with )
-        helps for checking parenthases syntax
+        
+            Returns: 
+                the subtree and the number of parenthases after incrementing if met with ( and decrementing if met with )
+                helps for checking parenthases syntax
         """
         currentToken = self.consumeToken()
         if currentToken:
@@ -154,13 +164,15 @@ class Parser:
     def parseTerm(self, currentToken)->AstNode:
         """
         expects to recieve an identifier, literal, method call or a function call, raise an error if not
+        
         Params: current token
+        
         Returns:
         an ast node of the term
         """
         if not currentToken: return None
         # checks if the term is a function call
-        if (currentToken.type=="identifier" or currentToken.type=="builtinFunc"):
+        if currentToken.type=="builtinFunc":
             # call must be following the function name on the same line, so consuming the 
                 # token but then move position backwards in case it's not really a function call
             nextToken = self.consumeToken()
@@ -256,11 +268,14 @@ class Parser:
     def parseStatement(self, curlyBracesAmount = 0, nestedBlock = False)-> Tuple[AstNode, int]:
         """
         parses the current statement, checks for syntax errors
-        Params: 
-        curlyBracesAmount - the current amount of curly braces(incremented when '{' and decrementing when '}')
-        nestedBlock - boolean, True if statement is inside a scope
-        Returns: 
-        a tuple: first element is AstNode representing the statement, second element is the current amount of curly braces
+        
+            Params: 
+                curlyBracesAmount - the current amount of curly braces(incremented when '{' and decrementing when '}')
+                nestedBlock - boolean, True if statement is inside a scope
+            
+            Returns: 
+                a tuple: first element is AstNode representing the statement, second element is the current amount of curly braces
+            
         """
         node = None
         parent = self.consumeToken()
@@ -393,7 +408,9 @@ class Parser:
 
     def parse(self):
         """
-        creates Ast with one root of the main program
+        creates Ast with one root of the main program and returns it
+
+        parses each statement of the code
         """
         ast = Ast()
         endOfCode = False
