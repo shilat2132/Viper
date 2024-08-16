@@ -223,8 +223,8 @@ class Parser:
         creates a node representing a scope body with parsed statements and adds it to the parentNode
         
         Params:
-        parentNode - the node to add the body node to
-        curlyBracesAmount - the current amount of curly braces, used to compare between amount of { and }
+            parentNode - the node to add the body node to
+            curlyBracesAmount - the current amount of curly braces, used to compare between amount of { and }
 
         Returns: curlyBracesAmount
         """
@@ -369,16 +369,9 @@ class Parser:
             else: forNode.addChild(AstNode(iterable.type, iterable.value)) #for identifier
 
             curlyBracesAmount = self.parseBlock(forNode, curlyBracesAmount)
-            # checkParenthasesValidation(curlyBracesAmount, "{}")
             node = forNode
         
-        # function definition - function funcName(args){statements}
-        if parent.value=="function" and nextToken.type == "identifier":
-            node = AstNode("functionDef", nextToken.value)
-            self.consumeToken() #consumes the function name
-            self.parseArgsOrValues(node, True)
-            curlyBracesAmount = self.parseBlock(node, curlyBracesAmount)
-            # checkParenthasesValidation(curlyBracesAmount, "{}")
+    
 
         if node:
             next = self.consumeToken()

@@ -1,7 +1,0 @@
-
-
-Provide clear documentation that includes:
-A language specification detailing the syntax and semantics
-Instructions on how to run the interpreter
-Example programs and expected outputs
-

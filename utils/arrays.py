@@ -137,3 +137,13 @@ class Array:
         if i >= l or i < 0:
             raise IndexError(f"index must be in range 0-{l-1}")
         self.a = self.a[:i] + self.a[i + 1:]
+
+    def __iter__(self):
+        """
+                Returns an iterator for the array.
+
+                Returns:
+                An iterator object.
+                """
+
+        return iter(self.a)

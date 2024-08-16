@@ -1,1 +1,0 @@
-*delete everything related to function definition in the all proj

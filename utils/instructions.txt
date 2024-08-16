@@ -1,8 +1,0 @@
-Define the Language:
-
-Students should design a simple programming language. The language should include:
-    - Basic arithmetic operations (addition, subtraction, multiplication, division)
-    - Variable assignments
-    - Conditional statements (if-else)
-    - Loop constructs (while or for loops)
-    - Functions 

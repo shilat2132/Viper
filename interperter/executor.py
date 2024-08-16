@@ -151,7 +151,7 @@ class Executor:
         condType, condition, isVar = self.evaluateExp(node.children[0])
         # condition can be either a logical expression (resulting in boolean value) or a variable
         if condType != "boolean" and not isVar:
-            raise TypeError("if should be followed only by a logical expression or a single variable")
+            raise TypeError("if and while should be followed only by a logical expression or a single variable")
         return condition
     
 

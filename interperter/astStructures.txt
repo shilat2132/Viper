@@ -63,9 +63,3 @@ for loop:
         range would have one child of args with children of args
     3. body
 
-function definition:
-    type: functionDef
-    value: funcName
-    children:
-        1. args
-        2. body

@@ -1,5 +1,0 @@
-Interpreter Implementation:
-
-Develop the interpreter to execute the code represented by the AST. 
-The interpreter should be able to handle the basic constructs defined in the language.
-Implement runtime error handling for common errors such as division by zero and syntax errors.

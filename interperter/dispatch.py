@@ -14,6 +14,11 @@ sys.path = original_sys_path
 
 
 def arrayMethodsDetails():
+      """
+      returns a dictionary where each key is array method name 
+      and the value is a tuple when the first element is the number of arguments the method takes 
+      and the second is the type of the element the method returns. it's 'any' if it could return any type
+      """
       dictionary= {
             "length": (0, "Number"),
             "index": (1, "Number"),
@@ -46,6 +51,11 @@ def dispatchTupleMethodsInit(dispatch):
             dispatch[name] = attr
 
 def tuplesMethodsDetails():
+      """
+      returns a dictionary where each key is tuple method name 
+      and the value is a tuple when the first element is the number of arguments the method takes 
+      and the second is the type of the element the method returns. it's 'any' if it could return any type
+      """
       dictionary = {
             "getItem": (1, "any"),
             "combine": (1, "tuple"),
@@ -64,6 +74,11 @@ def dispatchStringMethodsInit(dispatch):
             dispatch[name] = attr
 
 def stringsDetailsMethods():
+      """
+      returns a dictionary where each key is string method name 
+      and the value is a tuple when the first element is the number of arguments the method takes 
+      and the second is the type of the element the method returns. it's 'any' if it could return any type
+      """
       dictionary = {
             "REPLACE": (2, "string"),
             "isUpper": (0, "boolean"),

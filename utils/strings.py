@@ -84,6 +84,7 @@ def CONCAT(first, last) -> str:
     str: The concatenated string.
     """
 
-    if not isinstance(first, str) or not isinstance(last, str):
+    if not isinstance(first, str):
         raise TypeError("argument must be a string")
+    last = str(last)
     return first + last
