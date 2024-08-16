@@ -32,7 +32,7 @@ def tokenize(line):
     )
     |
     (
-        (?P<number>\d+\.\d+|\d+)  # Group 5: Numeric literals (numbers, including floats)
+        (?P<number>[-]?\d+\.\d+|[-]?\d+)  # Group 5: Numeric literals (numbers, including floats)
     )
     |
     (
@@ -44,11 +44,11 @@ def tokenize(line):
     )
     |
     (
-        (?P<tuple>\((?:\s*(?:[a-zA-Z_]\w*|\d+|\d+\.\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\))  # Group 8: Tuple
+        (?P<tuple>\((?:\s*(?:[a-zA-Z_]\w*|[-]?\d+\.\d+|[-]?\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|[-]?\d+\.\d+|[-]?\d+|\'[^\']*\'|\"[^\"]*\"))*)?\))  # Group 8: Tuple
     )
     |
     (
-        (?P<array>\[(?:\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|\d+|\'[^\']*\'|\"[^\"]*\"))*)?\])  # Group 9: Array
+        (?P<array>\[(?:\s*(?:[a-zA-Z_]\w*|[-]?\d+\.\d+|[-]?\d+|\'[^\']*\'|\"[^\"]*\")\s*(?:,\s*(?:[a-zA-Z_]\w*|[-]?\d+\.\d+|[-]?\d+|\'[^\']*\'|\"[^\"]*\"))*)?\])  # Group 9: Array
     )
     |
     (
@@ -77,16 +77,16 @@ def tokenize(line):
     |
     
    # Group 15: String methods
-    \b(?P<stringMethod>\.(REPLACE|isUpper|isLower|CONCAT|split))
+    \b(?P<stringMethod>\.(REPLACE|isUpper|isLower|CONCAT|split))\b
 
 
     |
     # Group 16: Array methods
-    \b(?P<arrayMethod>\.(length|index|get|addItem|append|remove))
+    \b(?P<arrayMethod>\.(length|index|get|addItem|append|remove|set))\b
 
     |
     # Group 17: Tuple methods
-    \b(?P<tupleMethod>\.(__getitem__|__iter__|__eq__|__repr__|__setattr__|__add__|index|sorted|length|rangeTuple))
+    \b(?P<tupleMethod>\.(getItem|combine|index|sorted|length))\b
     |
     (
         (?P<error>\S)  # Group 19: Any non-whitespace character (lexical error)
@@ -143,7 +143,6 @@ def tokenize(line):
     return tokens
 
 def lexer(code: str, tokens: list):
-    # codeTokensList = []
     # split to lines
     lines = code.split("\n")
     # for each line classify to tokens with regex

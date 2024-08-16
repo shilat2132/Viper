@@ -104,6 +104,8 @@ class Parser:
         
         # consume the token of args represented by a string in a format of tuple, converts it to a list of args
         args = self.consumeToken()
+        if not args:
+            raise SyntaxError(f"the method/ function {mainNode.value} needs to be called with ()")
         if len(args.value)>2:
             args = argsToList(args.value)
 

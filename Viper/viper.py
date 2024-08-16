@@ -29,19 +29,21 @@ class Viper:
         # print(Viper.tokens[1], "\n", Viper.tokens[4], "\n", Viper.tokens[5] )
         # for v in tokens:
         #     print(v)
+
         ast = Parser(tokens).parse()
         vars = Executor().evaluate(ast.rootNode)
-        # print(vars)
+        print(vars)
 
 
            
 
 
 code = """
-function isTrue(val){
-x = val
-return (x, 2)
+a1 = [1, 3.5]
+for i in range(5){
+a1.append(i)
 }
+ele = a1.get(2)
 """
 Viper(code).interperter()
 
