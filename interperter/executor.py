@@ -77,14 +77,18 @@ class Executor:
     
         return returnType, value
     
-    # need to check return type for any possible array/tuple/string method - maybe put it in a dictionary to make it easier
     def evaluateMethods(self, node, isMethod=True, obj =None):
         """
+            evaluates and executes a method call on a string/tuple/array or initializes array/tuple
+            
             Params:
                 node= the methodCall ASTnode
                 isMethod = is that a method or initialization
                 obj = the object the method should be called on(the name of the object)
             
+            Errors:
+                raises an error if method doesn't exist on the object type or if method got unmatched number of arguments
+
             Returns:
                 tuple:
                     -returnType: type of the method returned element
@@ -155,7 +159,6 @@ class Executor:
         return condition
     
 
-# needs to take care of method call later
     def evaluateTerm(self, node):
         """
         Evaluates a term, which might be a literal, a variable, a function call, or a method call.
@@ -182,11 +185,11 @@ class Executor:
             isVar = True
             returnType, value = var.type, var.value
         
-        # function call - either built in or a user defined
+        # function call
         if node.type == "functionCall":
             returnType, value = self.evaluateFunctionCall(node)
 
-        # MISSING A METHOD CALL AS A TERM EVALUATION
+        # METHOD CALL
         if node.type == "methodCall":
             returnType, value = self.evaluateMethods(node,True, node.children[0].value)
         return returnType, value, isVar
@@ -205,15 +208,21 @@ class Executor:
                 - isVar (bool): the returned element is var or not
         """
         isVar = False #used for logical expression in which one variable would also be considered as a logical expression - true if it's not None
+       
         # arithmetic or logical
         if node.type == "arithmeticExp" or node.type =="logicalExp":
             operation = node.value
             returnType = "Number" if node.type == "arithmeticExp" else "boolean"
-            op1 = self.evaluateExp(node.children[0])
-            op2 = self.evaluateExp(node.children[1])
-            # op1 and op2 are both tuples whose second element is the value of the operand
-            result = Executor.builtInFunctions[operation](op1[1], op2[1]) #the value
-            value = result
+            if operation =="negate":
+                op1 =self.evaluateExp(node.children[0])
+                result = Executor.builtInFunctions[operation](op1[1]) #the value
+                value = result
+            else:   
+                op1 = self.evaluateExp(node.children[0])
+                op2 = self.evaluateExp(node.children[1])
+                # op1 and op2 are both tuples whose second element is the value of the operand
+                result = Executor.builtInFunctions[operation](op1[1], op2[1]) #the value
+                value = result
         
 
         # if the node is not an expression then it's a term
@@ -228,7 +237,6 @@ class Executor:
          analyzes any possible construct of the code (any possible ast node)
         """
         # assign
-        # don't forget to allow function/method call
         if node.type == "assign":
             target = node.children[0].value #the name of the target var
             source = self.evaluateExp(node.children[1]) #returns a tuple of type and value

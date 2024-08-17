@@ -25,6 +25,9 @@ class Vars:
             del self.variables[varName]
 
     def __repr__(self):
-        return f"{self.variables}"
+        st = ""
+        for item in self.variables.values():
+            st+= str(item) + "\n"
+        return st
 
 

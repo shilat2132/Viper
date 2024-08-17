@@ -47,8 +47,9 @@ def isUpper(text) -> bool:
         raise TypeError("argument must be a string")
 
     for c in text:
-        if ord(c) < 65 or ord(c) > 90:
+        if 'a' <= c <= 'z':
             return False
+    
     return True
 
 
@@ -67,8 +68,10 @@ def isLower(text) -> bool:
         raise TypeError("argument must be a string")
 
     for c in text:
-        if ord(c) < 32 + 65 or ord(c) > 32 + 90:
+        # Check if the character is an uppercase letter
+        if 'A' <= c <= 'Z':
             return False
+    
     return True
 
 

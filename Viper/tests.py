@@ -19,108 +19,8 @@ for i in range(4){
 print(y)
 
 }
-
-
-
-# code1 = """
-# x = 10
-# y = 5
-# sum = x + y
-# if sum > 10 {
-#     print("Sum is greater than 10")
-# } else {
-#     print("Sum is 10 or less")
-# }
-
-# for i in range(3) {
-#     print("Iteration:", i)
-# }
-# """
-# Viper(code1).interperter()
-
-# code2 = """
-# arr = [1, 2, 3]
-# sum = 0
-# for num in arr {
-#     sum = sum + num
-# }
-# print("Sum of array:", sum)
-
-# text = "Hello"
-# if text.isUpper() {
-#     print("Text is uppercase")
-# } else {
-#     print("Text is not uppercase")
-# }
-# """
-# Viper(code2).interperter() 
-
-
-# code3 = """                     
-# x = 10
-# y = "5"
-# result = x + y  
-# if result > 10 {
-#     print("This will not print due to error")
-# }
-# """
-# #A program with a typo that tries 
-# #to append a number to a string, 
-# # causing a runtime error.
-# Viper(code3).interperter()
-
-# code4 = """
-# text = "Hello"
-# if x + 5 {
-#     print("This condition is not boolean")
-# }
-
-# arr = [1, 2, 3]
-# arr.replace(1, "one")  
-# """
-# #A program with a syntax error and a type error: using a 
-# #non-Boolean condition and using an inappropriate method 
-# #on an array.
-# Viper(code4).interperter()
-
-# code5 = """
-# text = true
-# if text {
-#     print("This condition is not boolean")
-# }
-
-# arr = [1, 2, 3]
-# arr.replace(1, "one")  
-# """
-# #A program with a syntax error and a type error: using a 
-# #non-Boolean condition and using an inappropriate method 
-# #on an array.
-# Viper(code4).interperter()
-
-code5 = """
-str1 = "Hello"
-str2 = "World"
-greeting = str1.CONCAT(" ")
-greeting = greeting.CONCAT(str2)
-print(greeting)
-
-arr = [10, 20, 30]
-arr.append(40)
-print(arr)
-
-arr.addItem(2, 25)
-print(arr)
-
-tup = (1, 2, 3)
-tup_to_add = (4, 5, 6)
-tup2 = tup.combine(tup_to_add)
-print(tup2)
-
-index_of_3 = tup2.index(3)
-print(index_of_3)
 """
 # Viper(code1).interperter()
-
 
 code2 = """
 x = sqrt(9)+3
@@ -152,6 +52,7 @@ print(k)
 
 
 code4 = """
+x=6
 if x{
 print("yes")
 }
@@ -169,6 +70,124 @@ str = str.CONCAT(i)
 }
 """
 # Viper(code5).interperter()
+
+
+code6 ="""
+x = 10
+y = 5
+sum = x + y
+if sum > 10 {
+    print("Sum is greater than 10")
+} else {
+    print("Sum is 10 or less")
+}
+
+for i in range(3) {
+    print("Iteration:", i)
+}
+"""
+# Viper(code1).interperter()
+
+code7 = """
+arr = [1, 2, 3]
+sum = 0
+for num in arr {
+    sum = sum + num
+}
+print("Sum of array:", sum)
+
+text = "HELLO"
+if text.isUpper() {
+    print("Text is uppercase")
+} else {
+    print("Text is not uppercase")
+}
+"""
+# Viper(code7).interperter() 
+
+
+
+
+
+code8 = """
+text = true
+if text {
+    print("This condition is boolean")
+}
+x=5
+if x!=5{
+x=9
+}
+else
+{
+print("this is the else block and it works")
+}
+
+arr = ["tuples"]
+len = arr.length()
+tup = ("are", "fun")
+for t in tup{
+arr.append(t)
+}
+areIndex = arr.index("are")
+if arr.index("array") == -1{
+print("can't find array word in arr")
+}
+
+arr.set(areIndex, "are not")
+element = arr.get(areIndex)
+print(arr)
+arr.remove(0)
+arr.addItem(0, "arrays")
+print("No! ", arr)
+
+"""
+
+# Viper(code8).interperter()
+
+code10 = """
+tup = (9, 1, 3)
+tup_to_add = (21, 17, 6)
+tup2 = tup.combine(tup_to_add)
+print(tup2)
+
+index_of_3 = tup2.index(3)
+print(index_of_3)
+item4 = tup2.getItem(4)
+sorted = tup2.sorted()
+len = tup2.length()
+"""
+# Viper(code10).interperter()
+
+
+
+code11 = """
+lo = "all lower"
+up = "ALL UPPER"
+if lo.isLower(){
+print(lo, "is all lower")
+}
+if up.isUpper(){
+print(up, "is all upper")
+}
+
+text = "The bigdata data scientict was analyzing datas"
+new_text = text.REPLACE("data", "structure")
+print(new_text)
+"""
+# Viper(code11).interperter()
+
+code12 = """
+x = 20/5
+y=x%3
+f = false
+t = !f
+
+if !f{
+print(f)
+}
+"""
+# Viper(code12).interperter()
 
 # PROGRAMS THAT THROW ERRORS
 # SYNTAX ERRORS
@@ -241,6 +260,8 @@ x=1
 
 # Viper(err8).interperter()
 
+
+# would raise an error for trying to add a number and a string
 err9 = """
 x=0
 x = x + "6"
@@ -251,5 +272,11 @@ print("some str")
 }
 
 """
-Viper(err9).interperter()
+# Viper(err9).interperter()
 
+# would throw an error for using an inappropriate method on an array.
+err10 = """
+arr = [1, 2, 3]
+arr.REPLACE(1, "one")  
+"""
+# Viper(err10).interperter()

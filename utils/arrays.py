@@ -104,8 +104,8 @@ class Array:
         if not isinstance(i, int):
             raise TypeError("index must be an integer")
 
-        a1 = self.a[:i + 1]
-        a2 = self.a[i + 1:]
+        a1 = self.a[:i]
+        a2 = self.a[i:]
         self.a = a1 + [element] + a2
 
     def append(self, element):

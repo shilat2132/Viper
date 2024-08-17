@@ -212,6 +212,12 @@ class Parser:
             tupleNode = AstNode('Tuple', currentToken.value)
             self.parseArgsOrValues(tupleNode, False, "values")
             return tupleNode
+        # checks for negative number
+        elif currentToken.value == "-" and self.peekToken() !=-1 and self.peekToken().type == "number":
+            n = self.consumeToken() #consume the number
+            if not n:
+                raise SyntaxError(f"Unexpected token: '{currentToken.value}' in line {self.currentLine} col {self.currentIndex-1}")
+            return AstNode("Number", -1*n.value)
         else:
             raise SyntaxError(f"Unexpected token: '{currentToken.value}' in line {self.currentLine} col {self.currentIndex-1}")
 

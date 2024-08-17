@@ -27,4 +27,5 @@ class Viper:
         lexer(self.stringCode, tokens) # type: ignore
         ast = Parser(tokens).parse()
         vars = Executor().evaluate(ast.rootNode)
-        print(vars)
+        print("\n Variables in the end of the program: \n", vars)
+       
