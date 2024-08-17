@@ -280,3 +280,12 @@ arr = [1, 2, 3]
 arr.REPLACE(1, "one")  
 """
 # Viper(err10).interperter()
+
+# would raise an error because a number is not iterable
+err11 = """
+a= 4
+for i in a{
+print(i)
+} 
+"""
+# Viper(err11).interperter()
