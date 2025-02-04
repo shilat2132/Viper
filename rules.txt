@@ -1,0 +1,407 @@
+﻿How to use
+* Inside the project, enter the Viper folder and the tests.py file. 
+* In there you can find tests of the code where the first part contains program that work and the second part contains program that would raise errors(errors of syntax/lexical/semantics). Each error is explained in a comment above the code
+* In order to run one of the program, uncomment the line:
+# Viper(code11).interperter()
+* And then run the python file. Uncomment only one program each time or the code wouldn’t work correctly
+* You can try adding your own program by adding a string variable, for example code13 containing the code string and sending it to the interpreter that way: Viper(code13).interperter()
+The rules of the language are defined in the current file to help you test your own code.
+* Please notice that if you test a code with multiple errors, only the first error would be raised
+
+
+
+
+For convenience
+* I printed the ast of the code to help see the structure of the code
+* I also printed the variables at the end of executing the code, meaning you can see their values and types in the end
+________________
+
+
+Lexical rules
+* there is no null/None and return in the language
+* user can't define his own function but he can use built-in function
+
+
+keywords: while|for|if|else|in(would fit only for a for loop)
+
+
+operators: logical: ==, !=, &&, ||, !,>=, <=, <,>
+           arithmetic: +, *, /, %, -, ^
+           assign: =
+
+
+identifiers: variables names - can only start with _ or a letter, might include numbers. 1x isn't an identifier but x1 is
+
+
+literals: Number - either positive/negative, int or float
+         string - surrounded with ""
+         boolean - true/false
+         arrays - wrapped with [], tuples - wrapped with ()
+
+
+* both array and tuples can have 0 or more elements seperated with commas in case there is more than 1 element.
+* their elements can be either an identifier, literal of string/boolean/number but not another array/tuple/function call or method call
+
+
+built in functions: range|print|max|min|sqrt
+Parenthesis: () for function/method call or in expressions, {} for a block of if/else/for/while
+
+
+
+
+________________
+Syntax rules
+*  in complex expressions like this: x<=5 && x ==5 && v, you must wrap each part with (),
+ unless its part is made of one operand - for example the v in the above example: (x<=5) && (x ==5) && v
+
+
+*can only send identifiers or literals as arguments for a function but not expressions or other functions: fun(x+1) -> not allowed
+ min(3, max(2, 5)), or print(min(3,5)) -> not allowed
+
+
+* can't send literals of array/tuple as a function argument - func(x, 5, [2, 4], (g, 4)) -> not allowed
+* Scopes like while/if/for must have a body
+*  user can’t call a method on a method. For example:
+        stri.CONCAT(“a”).CONCAT(“s”)
+Won’t work, but saving the result of the first method call in a variable and then calling the method in that variable is okay
+
+
+
+
+________________
+AST STRUCTURE:
+Term:
+a node with with type of: literal, identifier, function/method call
+Example:  ├── Number: 1
+
+
+expression:
+    arithmeticExp:
+        type: arithmeticExp
+        value: the name of the operator, like add, pow
+        children: always 2
+            1. left operand - either expression or a term
+            2. right operand - expression/term
+
+
+Example: sqrt(9)+3
+
+
+arithmeticExp: add
+│   │             ├── functionCall: sqrt
+│   │       │           └── args: None
+│   │       │                 └── Number: 9
+│   │             └── Number: 3
+
+
+    logicalExp:
+        type: logicalExp
+        value: the name of the operator, like And, less (<)
+        children: 
+            2 children case
+                1. left operand - logicalExp or a boolean variable/boolean literal
+                2. right operand - logicalExp or a boolean variable/boolean literal
+                in cases of operators like <, ==, ... one of the operand might be a term or an arithmeticExp
+
+
+            1 child case:
+                the value of the expression would be negate for !
+                1. logicalExp
+
+
+functionCall:
+Example:  min(1, 7)
+└── functionCall: min
+│           └── args: None
+│                 ├── Number: 1
+│                 └── Number: 7
+
+
+    type: functionCall
+    value: funcName
+    Children:
+* args: node with children of the args, might be identifier  or a literal of string/number/boolean
+        
+methodCall:
+    type: methodCall
+    value: methodName
+    children:
+        1. the object the method is performed at
+        2. Args: same as those of a function call
+Example:
+x.append(4)
+
+
+└── methodCall: append
+│           ├── var: x
+│           └── args: None
+│                 └── Number: 4
+
+
+assign:
+    type: assign
+    children:
+        1. target as a var
+        2. source - can be expression/function call/ method call/term
+
+
+
+
+if:
+    type: if
+    children: 
+        1. condition - expression/term
+        2. body - must have
+        3. else block - if exists with body of blocks
+
+
+Example:
+if (x>5) || (x==17){
+x= 1
+}else{
+x=5
+}
+
+
+if: None
+│           ├── logicalExp: Or
+│       │         ├── logicalExp: greater
+│       │   │           ├── var: x
+│       │   │           └── Number: 5
+│       │         └── logicalExp: equal
+│       │               ├── var: x
+│       │               └── Number: 17
+│           ├── body: None
+│       │         └── assign: None
+│       │               ├── var: x
+│       │               └── Number: 1
+│           └── elseBlock: None
+│                 └── body: None
+│                       └── assign: None
+│                             ├── var: x
+│                             └── Number: 5
+
+
+
+
+while:
+    type: while
+    children: 
+        1. condition - expression/term
+        2. body - must have
+
+
+Example:
+while x>0{
+print(x)
+x=x-1
+}
+
+
+
+
+ while: None
+│           ├── logicalExp: greater
+│       │         ├── var: x
+│       │         └── Number: 0
+│           └── body: None
+│                 ├── functionCall: print
+│           │           └── args: None
+│           │                 └── var: x
+│                 └── assign: None
+│                       ├── var: x
+│                       └── arithmeticExp: sub
+│                             ├── var: x
+│                             └── Number: 1
+
+
+for loop:
+    children:
+    1. iteration var
+    2. iterable, range would have a str tuple args
+        range would have one child of args with children of args
+    3. body
+
+
+Example:
+for k in range(2, 8){
+print(k)
+}
+
+
+ for: None
+│           ├── iterationVar: k
+│           ├── functionCall: range
+│       │         └── args: None
+│       │               ├── Number: 2
+│       │               └── Number: 8
+│           └── body: None
+│                 └── functionCall: print
+│                       └── args: None
+│                             └── var: k
+________________
+
+
+Semantics
+* All arithmetic operators would raise an error if user’s trying to use them with non-numbers
+
+
+* All functions/methods would raise an error if user’s trying to call them with number of arguments different from what they take
+
+
+* While and if would raise an error if the condition they were given is not logical and not a variable (if only a variable was given as a condition- the condition is met if the variable exists or if it’s true, if it doesn’t exists it would raise an error)
+* Trying to iterate over a non-iterable variable would raise an error
+
+
+* Any use of a variable that wasn’t defined would raise an error
+
+
+* Trying to perform a method on an object that doesn’t fit the method would raise an error
+________________
+operations/built in functions/ methods
+Arithmetic operators
+All of the following would raise an error if trying to use them with a non numbers
+
+
+1.  Addition (x+y)
+    Description: Returns the sum of two numbers.
+
+
+2.  Subtraction (x-y)
+    Description: Returns the difference between two numbers.
+
+
+3.  Multiplication (x*y)
+    Description: Returns the Multiplication of two numbers.
+
+
+4.  Division (x/y)
+    Description: Returns the quotient of two numbers. Raises an error if y is 0.
+
+
+5.  Exponentiation (x^y)
+    Description: Returns x raised to the power of y.
+
+
+6.  Square Root (sqrt(x))
+      Built in function
+Description: Returns the square root of x.
+
+
+Logical Operations:
+
+
+7.  Equality (x==y)
+    Description: Checks if two values are equal.
+
+
+8.  Inequality (x!=y)
+    Description: Checks if two values are not equal.
+
+
+9.  Greater Than (x>y)
+    Description: Checks if x is greater than y.
+
+
+10. Greater Than or Equal (x>=y)
+    Description: Checks if x is greater than or equal to y.
+
+
+11. Less Than (x<y)
+    Description: Checks if x is less than y.
+
+
+12. Less Than or Equal x<=y)
+    Python Function Name: lessEquals(x, y)
+    Description: Checks if x is less than or equal to y.
+
+
+13. Logical AND (x&&y)
+    Description: Returns True if both conditions are true, otherwise returns False.
+
+
+14. Logical OR (x||y)
+    Description: Returns True if at least one of the conditions is true, otherwise returns False.
+
+
+15. Logical NOT (!x)
+    Description: Returns the negation of x.
+
+
+Variable Management:
+16. Assignment (x=y)
+    Description: Assigns the value of y to the variable x 
+
+
+17. Minimum (min(x,y))
+    Description: Returns the smaller of the two values.
+
+
+18. Maximum (Max(x,y))
+    Description: Returns the larger of the two values.
+
+
+String Operations:
+
+
+19. Replace (st.REPLACE(substr, newSubstr))
+    Description: Replaces all occurrences of a substring within a string with another substring.
+
+
+20. Is Uppercase (st.isUpper())
+    Description: Checks if all characters in a string are uppercase.
+
+
+21. Is Lowercase (st.isLower())
+    Description: Checks if all characters in a string are lowercase.
+
+
+22. Concatenate (st.CONCAT(text))
+    Description: Concatenates two strings into one.
+
+
+Custom Tuple Operations:
+
+
+23. Find Index (t.Index(“v”))
+    Description: Finds the index of the first occurrence of a value in the tuple.
+
+
+24. Sort Tuple (t.sorted())
+    Description: Returns a new tuple with the values sorted.
+
+
+25. Get Tuple Length (t.length())
+    Description: Returns the number of elements in the tuple.
+
+
+24. Range Tuple (range(start=0, end))
+    Description: Generates a range tuple from start to end.
+
+
+Array Functions:
+
+
+25. Get Array Length (a.length())
+    Description: Returns the number of elements in the array.
+
+
+26. Find Index (a.index(element))
+    Description: Finds the index of the first occurrence of an element in the array.
+
+
+27. Get Item by Index (a.get(i))
+    Description: Retrieves the element at the specified index.
+
+
+28. Add Item (a.addItem(i, element))
+    Description: Inserts an element at the specified index.
+
+
+29. Append Item (a.append(element))
+    Python Function Name: append(element)
+    Description: Appends an element to the end of the array.
+
+
+30. Remove Item (a.remove(i))
+    Description: Removes the element at the specified index.
