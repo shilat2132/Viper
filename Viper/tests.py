@@ -60,7 +60,7 @@ print("yes")
 # Viper(code4).interperter()
 
 code5 = """
-a = [1, 5, "hello", "world"]
+a = [1, -5, "hello", "world"]
 a.append("!")
 str = ""
 for i in a{
@@ -86,7 +86,7 @@ for i in range(3) {
     print("Iteration:", i)
 }
 """
-# Viper(code1).interperter()
+# Viper(code6).interperter()
 
 code7 = """
 arr = [1, 2, 3]
