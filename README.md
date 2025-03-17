@@ -40,8 +40,8 @@ Then, you can enter code in the custom programming language and see the results.
 * Inside the project, enter the Viper folder and the tests.py file. 
 * In there you can find tests of the code where the first part contains programs that work and the second part contains programs that would raise errors(errors of syntax/lexical/semantics). Each error is explained in a comment above the code
 
-* In order to run one of the program, uncomment the line:
-# Viper(code11).interperter()
+* In order to run one of the programs, uncomment the line:
+Viper(code11).interperter()
 and then run the python file. 
 * Uncomment only one program each time or the code wouldn’t work correctly
 * You can try adding your own program by adding a string variable, for example code13 containing the code string and sending it to the interpreter that way: Viper(code13).interperter()
