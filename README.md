@@ -11,7 +11,7 @@ This project is a Python-based interpreter that simulates a general-purpose prog
 
 - Arithmetic and Boolean operations
 - Variable declaration and assignment
-- Arrays, tuples, and other data structures
+- Arrays and tuples
 - Conditional statements (`if`, `else`)
 - Loops (`while`, `for`)
 - Built-in functions(`sqrt`, `min`, `max`)
