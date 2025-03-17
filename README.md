@@ -14,7 +14,7 @@ This project is a Python-based interpreter that simulates a general-purpose prog
 - Arrays and tuples
 - Conditional statements (`if`, `else`)
 - Loops (`while`, `for`)
-- Built-in functions(`sqrt`, `min`, `max`)
+- Built-in functions(`sqrt`, `min`, `max`, `range`)
 
 ## Installation
 
