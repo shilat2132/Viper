@@ -20,7 +20,7 @@ print(y)
 
 }
 """
-# Viper(code1).interperter()
+Viper(code1).interperter()
 
 code2 = """
 x = sqrt(9)+3
